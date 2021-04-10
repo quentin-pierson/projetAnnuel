@@ -1,5 +1,12 @@
 # projetAnnuel
 
+- classification des genres de musique
+-
+
+## Constitution du dataset 
+Prise des musiques sur Youtube. 
+Scrapper musique depuis Soundcloud.
+
 
 ## Contributors
 
