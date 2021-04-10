@@ -1,7 +1,7 @@
 # projetAnnuel
 
 - classification des genres de musique
--
+- classification des animaux
 
 ## Constitution du dataset 
 - Prise des musiques sur Youtube. 
