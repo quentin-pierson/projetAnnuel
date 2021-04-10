@@ -4,8 +4,8 @@
 -
 
 ## Constitution du dataset 
-Prise des musiques sur Youtube. 
-Scrapper musique depuis Soundcloud.
+- Prise des musiques sur Youtube. 
+- Scrapper musique depuis Soundcloud.
 
 
 ## Contributors
