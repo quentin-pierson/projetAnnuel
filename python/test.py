@@ -1,9 +1,9 @@
 from ctypes import *
+import path_to_dll as path
 
-path_to_dl = "G:/Programmes/Python/projetAnnuel/CppIA/cmake-build-debug/CppIA.dll"
 
 if __name__ == '__main__':
-    mylib = cdll.LoadLibrary(path_to_dl)
+    mylib = cdll.LoadLibrary(path.path_to_dll)
 
     mylib.toto.argype = []
     mylib.toto.restype = c_int
@@ -24,6 +24,3 @@ if __name__ == '__main__':
     rslt = mylib.array_sum(arr, arr_size)
 
     print(rslt)
-
-
-
