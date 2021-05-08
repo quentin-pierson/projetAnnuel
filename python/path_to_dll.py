@@ -1,1 +1,1 @@
-path_to_dll = "G:/Programmes/Python/projetAnnuel/CppIA/cmake-build-debug/CppIA.dll"
+path_to_dll = "D:/projet/ESGI/3ESGI/ProjetAnnuel/projetAnnuel/CppIA/cmake-build-debug/CppIA.dll"
