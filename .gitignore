@@ -3,4 +3,4 @@
 .idea/
 cmake-build-debug/
 python/__pycache__/
-CppIA/Eigen
+CppIA/Eigen/
