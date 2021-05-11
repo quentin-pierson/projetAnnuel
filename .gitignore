@@ -2,3 +2,5 @@
 .ipynb_checkpoints
 .idea/
 cmake-build-debug/
+python/__pycache__/
+CppIA/Eigen
