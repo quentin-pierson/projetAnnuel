@@ -94,27 +94,6 @@ DLLEXPORT void train_classification_rosenblatt_rule_linear_model(Model* model,
 }
 
 
-/*
- * def train_regression_pseudo_inverse_linear_model(model: [float],
-                                                 flattened_dataset_inputs:[float],
-                                                 flattened_dataset_expected_outputs: [float]):
-  input_dim = len(model) - 1
-  samples_count = len(flattened_dataset_inputs) // input_dim
-
-  X = np.array(flattened_dataset_inputs)
-  Y = np.array(flattened_dataset_expected_outputs)
-
-  X = np.reshape(X, (samples_count, input_dim))
-  ones = np.ones((samples_count, 1))
-  X = np.hstack((ones, X))
-
-  Y = np.reshape(Y, (samples_count, 1))
-  W = np.matmul(np.matmul(np.linalg.inv(np.matmul(X.T, X)), X.T), Y)
-
-  for i in range(len(model)):
-    model[i] = W[i][0]
- */
-
 DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model, int flattened_dataset_inputs_size, float* flattened_dataset_inputs ,
                                                              int flattened_dataset_expected_outputs_size, float* flattened_dataset_expected_output){
     int input_dim = model->size -2;
@@ -124,16 +103,9 @@ DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model, int fl
     Vector3f vX (flattened_dataset_inputs);
     X << vX;
 
-    cout << "X: " << X << "\n" << "\n";
-
     MatrixXf Y(flattened_dataset_expected_outputs_size,1); // define matrix
     Vector3f vY (flattened_dataset_expected_output);
     Y << vY;
-    cout << "Y: " << Y << "\n" << "\n";
-
-    /*Map<MatrixXf> X2(X.data(), input_dim,samples_count); // reshape X
-    cout << "X2: " << X2 << "\n" << "\n";
-     */
 
     MatrixXf ones(samples_count, 1);
     ones.setOnes();
@@ -141,30 +113,19 @@ DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model, int fl
     MatrixXf X3(X.rows(), X.cols()+ones.cols()); // hstack
     X3 << ones, X ;
 
-    cout << "X3: " << X3 << "\n" << "\n";
-
-   /* Map<MatrixXf> Y2(Y.data(), samples_count, 1); // reshape Y
-    cout << "Y2: " << Y2 << "\n" << "\n";*/
-
     MatrixXf W = X3.transpose() * X3;
-    cout << "W: " << W << "\n" << "\n";
-
 
     MatrixXf W_inv = W.inverse();
-    cout << "W_inv: " << W_inv << "\n" << "\n";
 
     MatrixXf W2 = W_inv * X3.transpose();
-    cout << "W2: " << W2 << "\n" << "\n";
 
     MatrixXf W3 = W2 * Y;
-    cout << "W3: " << W3 << "\n" << "\n";
 
     ArrayXf a = W3.array();
-    cout << "Array: " << a << "\n" << "\n";
 
     for(int i=0; i<model->size-1; i++){
         model->values[i] = a[i];
-        cout << "Array 2 : " << a[i] << "\n";
+
     }
 
 }

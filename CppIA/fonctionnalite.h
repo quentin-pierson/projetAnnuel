@@ -10,7 +10,7 @@ float* cut_float_array(float* array, int start, int end);
 float* copy_array(float* array, int size);
 float* insert_array(float* array, int size,int pos, float value);
 
-
+// linearModel
 DLLEXPORT void destroy_linear_model(Model* model);
 DLLEXPORT Model* create_linear_model(int input_dim);
 DLLEXPORT float predict_linear_model_regression_unefficient_but_more_readable(Model* model, float* sample_inputs,
@@ -32,3 +32,8 @@ DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model,
                                                   float* flattened_dataset_inputs,
                                                              int flattened_dataset_outputs_size,
                                                   float* flattened_dataset_expected_output);
+
+// MLP
+void printW(Model3* W,int * npl, int nplSize);
+void freeW(Model3* W,int * npl, int nplSize);
+DLLEXPORT void create_mlp_model(int * npl, int nplSize);
