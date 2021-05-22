@@ -94,6 +94,7 @@ if __name__ == '__main__':
     test_dataset_inputs = [i for i in range(-10, 11)]
     predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
 
+
     plt.plot(test_dataset_inputs, predicted_outputs)
     plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
     plt.axis([-10, 10, -10, 10])
@@ -117,27 +118,26 @@ if __name__ == '__main__':
 
     print("Je suis la ")
 
-    dataset_inputs = [
-        [0, 0],
-        [1, 1],
-        [0, 1],
-        [1, 0],
-    ]
-
-    dataset_expected_outputs = [
-        -1,
-        -1,
-        1,
-        1,
-    ]
-    mlp.create_mlp_model([2, 2, 1])
-    #model = mlp.create_mlp_model([2, 2, 1])
-    test_dataset = [[x1 / 10, x2 / 10] for x1 in range(-10, 20) for x2 in range(-10, 20)]
-    colors = ["blue" if output >= 0 else "red" for output in dataset_expected_outputs]
-    print("j'ai passer la couleur")
-
-
+    # dataset_inputs = [
+    #     [0, 0],
+    #     [1, 1],
+    #     [0, 1],
+    #     [1, 0],
+    # ]
     #
+    # dataset_expected_outputs = [
+    #     -1,
+    #     -1,
+    #     1,
+    #     1,
+    # ]
+    # # mlp.create_mlp_model([2, 2, 1])
+    # model3 = mlp.create_mlp_model([2, 2, 1])
+    # test_dataset = [[x1 / 10, x2 / 10] for x1 in range(-10, 20) for x2 in range(-10, 20)]
+    # colors = ["blue" if output >= 0 else "red" for output in dataset_expected_outputs]
+
+
+
     # predicted_outputs = [lm.predict_mlp_model_classification(model, p)[0] for p in test_dataset]
     # predicted_outputs_colors = ['blue' if label >= 0 else 'red' for label in predicted_outputs]
     # plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
@@ -165,3 +165,35 @@ if __name__ == '__main__':
     # for p in dataset_inputs:
     #     flattened_dataset_inputs.append(p[0])
     #     flattened_dataset_inputs.append(p[1])
+
+
+    # ----------------------------------------------------------------------------------
+    #               Utilisation du MLP pour la regression
+    # ----------------------------------------------------------------------------------
+
+    dataset_inputs = [
+        [-5],
+        [4],
+        [6],
+    ]
+
+    dataset_expected_outputs = [
+        1.2,
+        7,
+        8.3
+    ]
+
+    resultat3 = mlp.create_mlp_model([2, 2, 1])
+    model3 = resultat3[0]
+
+    flattened_dataset_inputs = []
+    for p in dataset_inputs:
+        flattened_dataset_inputs.append(p[0])
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [mlp.predict_mlp_model_regression(model3, [p])[0] for p in test_dataset_inputs]
+
+    print("Je suis le type de predicted_outputs : ",type(predicted_outputs))
+
+    print(predicted_outputs)
+

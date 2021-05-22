@@ -9,18 +9,18 @@ class MLP{
         X: [[float]]
         deltas: [[float]]
         */
-    private:
-        Model3* W;
-        Model* d;
-        Model2* X;
-        Model2* deltas;
-    public:
-        MLP(Model3* W, Model* d, Model2* X, Model2* deltas){
-            this->W = W;
-            this->d = d;
-            this->X = X;
-            this->deltas = deltas;
-        }
+public:
+    Model3* W;
+    Model* d;
+    Model2* X;
+    Model2* deltas;
+public:
+    MLP(Model3* W, Model* d, Model2* X, Model2* deltas){
+        this->W = W;
+        this->d = d;
+        this->X = X;
+        this->deltas = deltas;
+    }
 
 
     /*
@@ -96,10 +96,10 @@ class MLP{
 
 };
 
-void printW(Model3* W,int * npl, int nplSize){
+void printW(Model3* W){
     std::cout << "[ ";
-    for(int l=0; l<nplSize ;l++){ //
-        int imax= npl[l-1]+1 ;
+    for(int l=0; l< W->x ;l++){ //
+        int imax= W->y[l-1]+1 ;
         std::cout << "[ ";
         if(l==0){
             std::cout << "], ";
@@ -107,7 +107,7 @@ void printW(Model3* W,int * npl, int nplSize){
         }
         for (int i = 0; i < imax; i++){
             std::cout << "[ ";
-            int jmax = npl[l] + 1;
+            int jmax = W->y[l] + 1;
             for (int j = 0; j < jmax; j++){
                 std::cout << W->values[l][i][j] << ", ";
             }
@@ -118,9 +118,23 @@ void printW(Model3* W,int * npl, int nplSize){
     std::cout << "] "<< "\n";
 }
 
-void freeW(Model3* W,int * npl, int nplSize) {
-    for(int l=0; l<nplSize ;l++){ //
-        int imax= npl[l-1]+1 ;
+void printX(Model2* X){
+    std::cout << "[ ";
+    for(int l=0; l< X->x ;l++){ //
+        int iMax = X->y[l];
+        std::cout << "[ ";
+
+        for (int i = 0; i < iMax; i++){
+            std::cout << X->values[l][i] << ", ";
+        }
+        std::cout << "], "<< "\n";
+    }
+    std::cout << "] "<< "\n";
+}
+
+void freeW(Model3* W) {
+    for(int l=0; l < W->x ;l++){ //
+        int imax= W->y[l-1]+1;
 
         if(l!=0) {
             for (int i = 0; i < imax; i++) {
@@ -138,94 +152,129 @@ void freeW(Model3* W,int * npl, int nplSize) {
 }
 
 
-DLLEXPORT void create_mlp_model(int * npl, int nplSize){
-    cout << "NplSize" << nplSize << "\n";
-
-    Model3* W = (Model3*) (malloc( sizeof(Model3)));
-    cout <<"Coucou Intermediaire "<< "\n" ;
-    W->values = (float***)(malloc( sizeof(float***) * nplSize));
+DLLEXPORT MLP* create_mlp_model(int * npl, int nplSize) {
+    // W
+    Model3 *W = (Model3 *) (malloc(sizeof(Model3)));
+    W->values = (float ***) (malloc(sizeof(float ***) * nplSize));
 
     W->x = nplSize;
-    W->y = (int*)(malloc(sizeof(int)* nplSize));
-    for (int i = 0; i < nplSize; i++) {
-        W->y[i] = npl[i];
-    }
+    W->y = (int *) (malloc(sizeof(int) * nplSize));
 
-    cout <<"Coucou 2"<< "\n" ;
+    // X
+    Model2 *X = CreateModel2(nplSize);
 
-    for(int l=0; l<nplSize ;l++){
-        int imax= npl[l-1]+1 ;
-        if(l==0){
-            //W->values[l] = (float**)(malloc( sizeof(float**) * 1));
+    // Delta
+    Model2 *deltas = CreateModel2(nplSize);
+
+    // d
+    Model* d = (Model*) (malloc( sizeof(Model)));
+    d->values = (float *) (malloc(sizeof(float *) * nplSize));
+    d->size = nplSize;
+
+
+    std::default_random_engine generator;
+    std::uniform_real_distribution<float> distribution(-1.0, 1.0);
+
+    for (int l = 0; l < nplSize; l++) {
+        //d et les y
+        int val = npl[l];
+        W->y[l] = val;
+        d->values[l] = val;
+
+        //X et Deltas
+        int iMax2 = npl[l] + 1;
+
+        X->y[l] = iMax2;
+        deltas->y[l] = iMax2;
+
+        X->values[l] = (float *) (malloc(sizeof(float *) * iMax2));
+        deltas->values[l] = (float *) (malloc(sizeof(float *) * iMax2));
+
+        for (int i = 0; i < iMax2; i++) {
+
+            if (i == 0) {
+                X->values[l][i] = 1;
+                //append 1
+            } else {
+                X->values[l][i] = 0;
+                //append 0
+            }
+
+            deltas->values[l][i] = 0.0;
+        }
+
+        //W
+        int imax = npl[l - 1] + 1;
+
+        if (l == 0) {
+            W->values[l] = (float **) (malloc(sizeof(float **) * 1));
             continue;
+        } else {
+            W->values[l] = (float **) (malloc(sizeof(float **) * imax));
         }
-        else{
-            W->values[l] = (float**)(malloc( sizeof(float**) * imax));
-        }
-        for (int i = 0; i < imax; i++){
+
+        for (int i = 0; i < imax; i++) {
+
             int jmax = npl[l] + 1;
-            W->values[l][i] = (float*)(malloc( sizeof(float*) * jmax));
-            for (int j = 0; j < jmax; j++){
-                W->values[l][i][j] = 12;
+            W->values[l][i] = (float *) (malloc(sizeof(float *) * jmax));
+            for (int j = 0; j < jmax; j++) {
+                W->values[l][i][j] = distribution(generator);
             }
         }
     }
-    cout <<"Coucou 3"<< "\n" ;
-    printW(W, npl, nplSize);
-    freeW(W, npl, nplSize);
+    cout << "W: " << "\n";
+    printW(W);
+
+    cout << "X: " << "\n";
+    printX(X);
+
+    cout << "deltas: " << "\n";
+    printX(deltas);
+    MLP* mlp = new MLP(W, d, X,deltas);
+    return mlp;
 }
 
-    /*Model* d = (Model*) (malloc( sizeof(Model)));
+Model2* CreateModel2(int size){
+    Model2* model2 = (Model2*) (malloc( sizeof(Model2)));
+    model2->values = (float **) (malloc(sizeof(float **) * size));
 
+    model2->x = size;
+    model2->y = (int *) (malloc(sizeof(int) * size));
 
-    Model2* X = (Model2*) (malloc( sizeof(Model2)));
+    return model2;
+}
 
-
-    Model2* deltas = (Model2*) (malloc( sizeof(Model2)));
-
-    return MLP(W, d, X, deltas);*/
-
-
-
-/*
- def create_mlp_model(npl: [int]):
-  W = []
-  for l in range(len(npl)):
-    W.append([])
-    if l == 0:
-      continue
-    for i in range(npl[l - 1] + 1):
-      W[l].append([])
-      for j in range(npl[l] + 1):
-        W[l][i].append(random.uniform(-1.0, 1.0))
-
-  d = list(npl)
-
-  X = []
-  for l in range(len(npl)):
-    X.append([])
-    for j in range(npl[l] + 1):
-      X[l].append(1.0 if j == 0 else 0.0)
-
-  deltas = []
-  for l in range(len(npl)):
-    deltas.append([])
-    for j in range(npl[l] + 1):
-      deltas[l].append(0.0)
-
-  return MLP(W, d, X, deltas)
-*/
-
+// Model2*
+DLLEXPORT float* predict_mlp_model_regression(MLP* model, float* sample_inputs, int size){
+    //model-> forward_pass(sample_inputs, false);
+    return TakeLast(model->X);
+}
 
 /*
 def predict_mlp_model_regression(model: MLP, sample_inputs:[float])-> [float]:
   model.forward_pass(sample_inputs, False)
   return model.X[-1][1:]
+ */
 
+float* TakeLast(Model2* model){
+    int xSize = model->x;
+    float * tab = (float *) (malloc(sizeof(float *) * model->y[xSize-1] -1));
+
+    for (int i = 1; i < model->y[xSize-1]; i++){
+        tab[i-1] = model->values[xSize-1][i];
+    }
+
+    return tab;
+}
+
+/*
 def predict_mlp_model_classification(model: MLP, sample_inputs:[float])-> [float]:
   model.forward_pass(sample_inputs, True)
   return model.X[-1][1:]
+ */
 
+
+/*
 def train_classification_stochastic_gradient_backpropagation_mlp_model(model: MLP,
                                                                        flattened_dataset_inputs: [float],
                                                                        flattened_dataset_expected_outputs: [float],
@@ -236,7 +285,11 @@ def train_classification_stochastic_gradient_backpropagation_mlp_model(model: ML
                                                   True,
                                                   alpha,
                                                   iterations_count)
+ */
 
+
+
+/*
 def train_regression_stochastic_gradient_backpropagation_mlp_model(model: MLP,
                                                                        flattened_dataset_inputs: [float],
                                                                        flattened_dataset_expected_outputs: [float],

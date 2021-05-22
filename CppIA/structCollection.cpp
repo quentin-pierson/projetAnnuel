@@ -10,7 +10,7 @@ typedef struct {
 typedef struct {
     float** values;
     int x;
-    int y;
+    int* y;
 } Model2;
 
 typedef struct {
