@@ -96,62 +96,6 @@ public:
 
 };
 
-void printW(Model3* W){
-    std::cout << "[ ";
-    for(int l=0; l< W->x ;l++){ //
-        int imax= W->y[l-1]+1 ;
-        std::cout << "[ ";
-        if(l==0){
-            std::cout << "], ";
-            continue;
-        }
-        for (int i = 0; i < imax; i++){
-            std::cout << "[ ";
-            int jmax = W->y[l] + 1;
-            for (int j = 0; j < jmax; j++){
-                std::cout << W->values[l][i][j] << ", ";
-            }
-            std::cout << "], ";
-        }
-        std::cout << "], "<< "\n";
-    }
-    std::cout << "] "<< "\n";
-}
-
-void printX(Model2* X){
-    std::cout << "[ ";
-    for(int l=0; l< X->x ;l++){ //
-        int iMax = X->y[l];
-        std::cout << "[ ";
-
-        for (int i = 0; i < iMax; i++){
-            std::cout << X->values[l][i] << ", ";
-        }
-        std::cout << "], "<< "\n";
-    }
-    std::cout << "] "<< "\n";
-}
-
-void freeW(Model3* W) {
-    for(int l=0; l < W->x ;l++){ //
-        int imax= W->y[l-1]+1;
-
-        if(l!=0) {
-            for (int i = 0; i < imax; i++) {
-
-                free(W->values[l][i]);
-
-            }
-        }
-        free(W->values[l]);
-    }
-
-    free(W->values);
-    free(W->y);
-    free(W);
-}
-
-
 DLLEXPORT MLP* create_mlp_model(int * npl, int nplSize) {
     // W
     Model3 *W = (Model3 *) (malloc(sizeof(Model3)));
@@ -234,17 +178,6 @@ DLLEXPORT MLP* create_mlp_model(int * npl, int nplSize) {
     return mlp;
 }
 
-Model2* CreateModel2(int size){
-    Model2* model2 = (Model2*) (malloc( sizeof(Model2)));
-    model2->values = (float **) (malloc(sizeof(float **) * size));
-
-    model2->x = size;
-    model2->y = (int *) (malloc(sizeof(int) * size));
-
-    return model2;
-}
-
-// Model2*
 DLLEXPORT float* predict_mlp_model_regression(MLP* model, float* sample_inputs, int size){
     //model-> forward_pass(sample_inputs, false);
     return TakeLast(model->X);
@@ -255,17 +188,6 @@ def predict_mlp_model_regression(model: MLP, sample_inputs:[float])-> [float]:
   model.forward_pass(sample_inputs, False)
   return model.X[-1][1:]
  */
-
-float* TakeLast(Model2* model){
-    int xSize = model->x;
-    float * tab = (float *) (malloc(sizeof(float *) * model->y[xSize-1] -1));
-
-    for (int i = 1; i < model->y[xSize-1]; i++){
-        tab[i-1] = model->values[xSize-1][i];
-    }
-
-    return tab;
-}
 
 /*
 def predict_mlp_model_classification(model: MLP, sample_inputs:[float])-> [float]:

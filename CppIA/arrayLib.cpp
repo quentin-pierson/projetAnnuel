@@ -46,3 +46,79 @@ float* insert_array(float* array, int size,int pos, float value){
 
     return new_array;
 }
+
+void printW(Model3* W){
+    std::cout << "[ ";
+    for(int l=0; l< W->x ;l++){ //
+        int imax= W->y[l-1]+1 ;
+        std::cout << "[ ";
+        if(l==0){
+            std::cout << "], ";
+            continue;
+        }
+        for (int i = 0; i < imax; i++){
+            std::cout << "[ ";
+            int jmax = W->y[l] + 1;
+            for (int j = 0; j < jmax; j++){
+                std::cout << W->values[l][i][j] << ", ";
+            }
+            std::cout << "], ";
+        }
+        std::cout << "], "<< "\n";
+    }
+    std::cout << "] "<< "\n";
+}
+
+void printX(Model2* X){
+    std::cout << "[ ";
+    for(int l=0; l< X->x ;l++){ //
+        int iMax = X->y[l];
+        std::cout << "[ ";
+
+        for (int i = 0; i < iMax; i++){
+            std::cout << X->values[l][i] << ", ";
+        }
+        std::cout << "], "<< "\n";
+    }
+    std::cout << "] "<< "\n";
+}
+
+void freeW(Model3* W) {
+    for(int l=0; l < W->x ;l++){ //
+        int imax= W->y[l-1]+1;
+
+        if(l!=0) {
+            for (int i = 0; i < imax; i++) {
+
+                free(W->values[l][i]);
+
+            }
+        }
+        free(W->values[l]);
+    }
+
+    free(W->values);
+    free(W->y);
+    free(W);
+}
+
+Model2* CreateModel2(int size){
+    Model2* model2 = (Model2*) (malloc( sizeof(Model2)));
+    model2->values = (float **) (malloc(sizeof(float **) * size));
+
+    model2->x = size;
+    model2->y = (int *) (malloc(sizeof(int) * size));
+
+    return model2;
+}
+
+float* TakeLast(Model2* model){
+    int xSize = model->x;
+    float * tab = (float *) (malloc(sizeof(float *) * model->y[xSize-1] -1));
+
+    for (int i = 1; i < model->y[xSize-1]; i++){
+        tab[i-1] = model->values[xSize-1][i];
+    }
+
+    return tab;
+}

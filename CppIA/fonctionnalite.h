@@ -9,6 +9,9 @@
 float* cut_float_array(float* array, int start, int end);
 float* copy_array(float* array, int size);
 float* insert_array(float* array, int size,int pos, float value);
+void printW(Model3* W);
+void printX(Model2* X);
+void freeW(Model3* W);
 
 // linearModel
 DLLEXPORT void destroy_linear_model(Model* model);
@@ -36,5 +39,7 @@ DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model,
 // MLP
 void printW(Model3* W,int * npl, int nplSize);
 void freeW(Model3* W,int * npl, int nplSize);
+Model2* CreateModel2(int size);
+float* TakeLast(Model2* model);
 Model2* CreateModel2(int size);
 float* TakeLast(Model2* model);
