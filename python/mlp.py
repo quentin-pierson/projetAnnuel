@@ -13,17 +13,15 @@ class MLPModel():
         self.c_float_p = np.ctypeslib.ndpointer(dtype=np.float64,
                                                 flags='C_CONTIGUOUS')
 
-
         # self.c_float_pp = POINTER(POINTER(c_float))
         # self.c_float_ppp = POINTER(POINTER(POINTER(c_float)))
 
         self.c_float_pp = POINTER(self.c_float_p)
         self.c_float_ppp = POINTER(self.c_float_pp)
 
-
         class Model(Structure):
             _fields_ = [
-                ("values", self.c_float_p),
+                ("values", POINTER(c_float)),
                 ("size", c_int)
             ]
 
@@ -43,11 +41,10 @@ class MLPModel():
 
         class ModelMlp(Structure):
             _fields_ = [
-                ("W", Model3),
-                ("d", Model),
-                ("X", Model2),
-                ("deltas", Model2),
-
+                ("W", POINTER(Model3)),
+                ("d", POINTER(Model)),
+                ("X", POINTER(Model2)),
+                ("deltas", POINTER(Model2))
             ]
 
         # ----------------------------------------------------------------------------------
@@ -57,10 +54,41 @@ class MLPModel():
         self.mylib.create_mlp_model.restype = POINTER(ModelMlp)
 
         # ----------------------------------------------------------------------------------
-        #        mylib = predict linear_model regression unefficient but_more readable
+        #                   mylib = predict_mlp_model_regression
         # ----------------------------------------------------------------------------------
         self.mylib.predict_mlp_model_regression.argtype = [POINTER(ModelMlp), self.c_float_p, c_int]
         self.mylib.predict_mlp_model_regression.restype = POINTER(c_float)
+
+        # ----------------------------------------------------------------------------------
+        #                   mylib = predict_mlp_model_classification
+        # ----------------------------------------------------------------------------------
+        self.mylib.predict_mlp_model_classification.argtype = [POINTER(ModelMlp), self.c_float_p, c_int]
+        self.mylib.predict_mlp_model_classification.restype = POINTER(c_float)
+
+        # ----------------------------------------------------------------------------------
+        #                   mylib = train_classification_stochastic_gradient_backpropagation_mlp_model
+        # ----------------------------------------------------------------------------------
+        self.mylib.train_classification_stochastic_gradient_backpropagation_mlp_model.argtype = [POINTER(ModelMlp),
+                                                                                                 self.c_float_p, c_int,
+                                                                                                 self.c_float_p,
+                                                                                                 c_int, c_float, c_int]
+        self.mylib.train_classification_stochastic_gradient_backpropagation_mlp_model.restype = c_void_p
+
+        # ----------------------------------------------------------------------------------
+        #                   mylib = train_regression_stochastic_gradient_backpropagation_mlp_model
+        # ----------------------------------------------------------------------------------
+        self.mylib.train_regression_stochastic_gradient_backpropagation_mlp_model.argtype = [POINTER(ModelMlp),
+                                                                                             self.c_float_p, c_int,
+                                                                                             self.c_float_p,
+                                                                                             c_int, c_float, c_int]
+        self.mylib.train_regression_stochastic_gradient_backpropagation_mlp_model.restype = c_void_p
+
+        # ----------------------------------------------------------------------------------
+        #                   mylib = free_mlp
+        # ----------------------------------------------------------------------------------
+        self.mylib.free_MLP.argtype = [POINTER(ModelMlp)]
+        self.mylib.free_MLP.restype = c_void_p
+
 
     def create_mlp_model(self, npl):
         npl_size = len(npl)
@@ -73,4 +101,86 @@ class MLPModel():
         sample_inputs_size = len(sample_inputs)
         sample_inputs_cast = cast((c_float * sample_inputs_size)(*sample_inputs), POINTER(c_float))
 
-        return self.mylib.predict_mlp_model_regression(model, sample_inputs_cast, sample_inputs_size)
+        result = []
+
+        maxi = int(model.d[0].values[2])
+
+        tab = self.mylib.predict_mlp_model_regression(model, sample_inputs_cast, sample_inputs_size)
+
+        if maxi > 1:
+
+            for i in range(0, maxi):
+                result.append(tab[i])
+        else:
+            result = tab[0]
+
+        return result
+
+    def predict_mlp_model_classification(self, model, sample_inputs):
+
+        sample_inputs_size = len(sample_inputs)
+        sample_inputs_cast = cast((c_float * sample_inputs_size)(*sample_inputs), POINTER(c_float))
+
+        result = []
+
+        maxi = int(model.d[0].values[2])
+
+        tab = self.mylib.predict_mlp_model_classification(model, sample_inputs_cast, sample_inputs_size)
+
+        if maxi > 1:
+
+            for i in range(0, maxi):
+                result.append(tab[i])
+        else:
+            result = tab[0]
+
+        return result
+
+
+    def train_classification_stochastic_gradient_backpropagation(self, model, flattened_dataset_inputs,
+                                                                 flattened_dataset_expected_outputs,
+                                                                 alpha=0.001,
+                                                                 iterations_count=100000):
+        flattened_dataset_inputs_size = len(flattened_dataset_inputs)
+
+        flattened_dataset_inputs_cast = cast((c_float * flattened_dataset_inputs_size)(*flattened_dataset_inputs),
+                                             self.c_float_p)
+
+        flattened_dataset_expected_outputs_size = len(flattened_dataset_expected_outputs)
+
+        flattened_dataset_expected_outputs_cast = cast((c_float * flattened_dataset_expected_outputs_size)(*flattened_dataset_expected_outputs),
+                                                       self.c_float_p)
+
+        self.mylib.train_classification_stochastic_gradient_backpropagation_mlp_model(model,
+                                                                                             flattened_dataset_inputs_cast,
+                                                                                             flattened_dataset_inputs_size,
+                                                                                             flattened_dataset_expected_outputs_cast,
+                                                                                             flattened_dataset_expected_outputs_size,
+                                                                                             c_float(alpha), iterations_count)
+
+
+
+    def train_regression_stochastic_gradient_backpropagation(self,
+                                                             model,
+                                                             flattened_dataset_inputs,
+                                                             flattened_dataset_expected_outputs,
+                                                             alpha=0.001,
+                                                             iterations_count=100000):
+        flattened_dataset_inputs_size = len(flattened_dataset_inputs)
+
+        flattened_dataset_inputs_cast = cast((c_float * flattened_dataset_inputs_size)(*flattened_dataset_inputs),
+                                             self.c_float_p)
+
+        flattened_dataset_expected_outputs_size = len(flattened_dataset_expected_outputs)
+
+        flattened_dataset_expected_outputs_cast = cast(
+            (c_float * flattened_dataset_expected_outputs_size)(*flattened_dataset_expected_outputs),
+            self.c_float_p)
+
+        self.mylib.train_regression_stochastic_gradient_backpropagation_mlp_model(model,flattened_dataset_inputs_cast,flattened_dataset_inputs_size,
+                                                                                         flattened_dataset_expected_outputs_cast, flattened_dataset_expected_outputs_size,
+                                                                                         c_float(alpha),
+                                                                                         iterations_count)
+
+    def free_MLP(self, model):
+        self.mylib.free_MLP(model)
