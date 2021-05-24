@@ -38,7 +38,6 @@ DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model,
 
 // MLP
 void printW(Model3* W,int * npl, int nplSize);
-void freeW(Model3* W,int * npl, int nplSize);
 Model2* CreateModel2(int size);
 float* TakeLast(Model2* model);
 Model2* CreateModel2(int size);

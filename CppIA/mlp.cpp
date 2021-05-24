@@ -22,67 +22,25 @@ public:
         this->deltas = deltas;
     }
 
-
-    /*
-     def forward_pass(self, sample_inputs: [float], is_classification: bool):
-       L = len(self.d) - 1
-
-       for j in range(1, self.d[0] + 1):
-         self.X[0][j] = sample_inputs[j - 1]
-
-       for l in range(1, L + 1):
-         for j in range(1, self.d[l] + 1):
-           sum_result = 0.0
-           for i in range(0, self.d[l - 1] + 1):
-             sum_result += self.W[l][i][j] * self.X[l - 1][i]
-           self.X[l][j] = sum_result
-           if is_classification or l < L:
-             self.X[l][j] = math.tanh(self.X[l][j])
-    */
-
     void forward_pass(float* sample_inputs, bool is_classification){
+        int L = this->d->size -1;
+        for(int j = 1; j < this->d->values[0]+1; j++){
+            this->X->values[0][j] = sample_inputs[j-1];
+        }
+
+        for(int l = 1; l < L+1; l++){
+            for(int j = 1; j < this->d->values[l] +1; j++){
+                float sum_result = 0.0;
+                for(int i = 0; i < this->d->values[l-1] +1; i++){
+                    sum_result += this->W->values[l][i][j] * this->X->values[l-1][i];
+                }
+                this->X->values[l][j] = sum_result;
+                if(is_classification == true || l < L){
+                    this->X->values[l][j] = tanhf(this->X->values[l][j]);
+                }
+            }
+        }
     }
-
-    /*
-
- def train_stochastic_gradient_backpropagation(self,
-                                               flattened_dataset_inputs: [float],
-                                               flattened_dataset_expected_outputs: [float],
-                                               is_classification: bool,
-                                               alpha: float = 0.001,
-                                               iterations_count: int = 100000):
-   input_dim = self.d[0]
-   output_dim = self.d[-1]
-   samples_count = len(flattened_dataset_inputs) // input_dim
-   L = len(self.d) - 1
-
-   for it in range(iterations_count):
-     k = random.randint(0, samples_count - 1)
-
-     sample_input = flattened_dataset_inputs[k * input_dim:(k+1) * input_dim]
-     sample_expected_output = flattened_dataset_expected_outputs[k * output_dim:(k+1) * output_dim]
-
-     self.forward_pass(sample_input, is_classification)
-
-     for j in range(1, self.d[L] + 1):
-       self.deltas[L][j] = (self.X[L][j] - sample_expected_output[j - 1])
-       if is_classification:
-         self.deltas[L][j] *= (1 - self.X[L][j] * self.X[L][j])
-
-     for l in reversed(range(1, L + 1)):
-       for i in range(1, self.d[l - 1] + 1):
-         sum_result = 0.0
-         for j in range(1, self.d[l] + 1):
-           sum_result += self.W[l][i][j] * self.deltas[l][j]
-
-         self.deltas[l - 1][i] = (1 - self.X[l-1][i] * self.X[l-1][i]) * sum_result
-
-     for l in range(1, L + 1):
-       for i in range(0, self.d[l-1] + 1):
-         for j in range(1, self.d[l] + 1):
-           self.W[l][i][j] -= alpha * self.X[l - 1][i] * self.deltas[l][j]
-
-*/
 
     void train_stochastic_gradient_backpropagation(float* flattened_dataset_inputs,
                                                    int flattened_dataset_inputs_size,
@@ -91,7 +49,42 @@ public:
                                                    bool is_classification,
                                                    float alpha,
                                                    int iterations_count){
+        int L = this->d->size -1;
+        float input_dim = this->d->values[0];
+        float output_dim = this->d->values[L];
+        int samples_count = flattened_dataset_inputs_size / input_dim;
 
+        for(int it=0; it<iterations_count; it++){
+            int k = rand() % samples_count;
+            float* sample_input = cut_float_array(flattened_dataset_inputs,k * input_dim,(k+1) * input_dim);
+            float* sample_expected_output = cut_float_array(flattened_dataset_expected_outputs, k * output_dim, (k+1) * output_dim);
+            this->forward_pass(sample_input,is_classification);
+
+            for(int j=1; j < this->d->values[L] +1; j++){
+                this->deltas->values[L][j] = (this->X->values[L][j] - sample_expected_output[j-1]);
+                if(is_classification){
+                    this->deltas->values[L][j] *= (1 - this->X->values[L][j] * this->X->values[L][j]);
+                }
+            }
+
+            for(int l = L; l >= 1; l--){
+                for(int i=1; i < this->d->values[l-1] + 1; i++) {
+                    float sum_result = 0.0;
+                    for (int j = 1; j < this->d->values[l] +1; j++) {
+                        sum_result += this->W->values[l][i][j] * this->deltas->values[l][j];
+                    }
+                    this->deltas->values[l -1][i] = (1 - this->X->values[l-1][i] * this->X->values[l-1][i]) * sum_result;
+                }
+            }
+            for(int l = 1; l < L +1; l++){
+                for(int i = 0; i < this->d->values[l-1]+1; i++){
+                    for (int j = 1; j < this->d->values[l]+1; j++) {
+                        float result = alpha * this->X->values[l-1][i] * this->deltas->values[l][j];
+                        this->W->values[l][i][j] -= result;
+                    }
+                }
+            }
+        }
     }
 
 };
@@ -114,10 +107,6 @@ DLLEXPORT MLP* create_mlp_model(int * npl, int nplSize) {
     Model* d = (Model*) (malloc( sizeof(Model)));
     d->values = (float *) (malloc(sizeof(float *) * nplSize));
     d->size = nplSize;
-
-
-    std::default_random_engine generator;
-    std::uniform_real_distribution<float> distribution(-1.0, 1.0);
 
     for (int l = 0; l < nplSize; l++) {
         //d et les y
@@ -158,69 +147,100 @@ DLLEXPORT MLP* create_mlp_model(int * npl, int nplSize) {
         }
 
         for (int i = 0; i < imax; i++) {
-
             int jmax = npl[l] + 1;
             W->values[l][i] = (float *) (malloc(sizeof(float *) * jmax));
             for (int j = 0; j < jmax; j++) {
+                std::random_device rd;
+                std::default_random_engine generator(rd());
+                std::uniform_real_distribution<float> distribution(-1.0, 1.0);
                 W->values[l][i][j] = distribution(generator);
             }
         }
     }
-    cout << "W: " << "\n";
-    printW(W);
 
-    cout << "X: " << "\n";
-    printX(X);
-
-    cout << "deltas: " << "\n";
-    printX(deltas);
     MLP* mlp = new MLP(W, d, X,deltas);
     return mlp;
 }
 
 DLLEXPORT float* predict_mlp_model_regression(MLP* model, float* sample_inputs, int size){
-    //model-> forward_pass(sample_inputs, false);
+    model-> forward_pass(sample_inputs, false);
     return TakeLast(model->X);
 }
 
-/*
-def predict_mlp_model_regression(model: MLP, sample_inputs:[float])-> [float]:
-  model.forward_pass(sample_inputs, False)
-  return model.X[-1][1:]
- */
-
-/*
-def predict_mlp_model_classification(model: MLP, sample_inputs:[float])-> [float]:
-  model.forward_pass(sample_inputs, True)
-  return model.X[-1][1:]
- */
+DLLEXPORT float* predict_mlp_model_classification(MLP* model, float* sample_inputs, int size){
+    model-> forward_pass(sample_inputs, true);
+    return TakeLast(model->X);
+}
 
 
-/*
-def train_classification_stochastic_gradient_backpropagation_mlp_model(model: MLP,
-                                                                       flattened_dataset_inputs: [float],
-                                                                       flattened_dataset_expected_outputs: [float],
-                                                                       alpha: float = 0.001,
-                                                                       iterations_count: int = 100000):
-  model.train_stochastic_gradient_backpropagation(flattened_dataset_inputs,
-                                                  flattened_dataset_expected_outputs,
-                                                  True,
-                                                  alpha,
-                                                  iterations_count)
- */
+DLLEXPORT void train_classification_stochastic_gradient_backpropagation_mlp_model(MLP* model,
+                                                                                  float* flattened_dataset_inputs,
+                                                                                  int flattened_dataset_inputs_size,
+                                                                                  float* flattened_dataset_expected_outputs,
+                                                                                  int flattened_dataset_expected_outputs_size,
+                                                                                  float alpha,
+                                                                                  int iterations_count){
+    model->train_stochastic_gradient_backpropagation(flattened_dataset_inputs,
+                                                     flattened_dataset_inputs_size,
+                                                     flattened_dataset_expected_outputs,
+                                                     flattened_dataset_expected_outputs_size,
+                                                     true,
+                                                     alpha,
+                                                     iterations_count);
+}
 
 
+DLLEXPORT void train_regression_stochastic_gradient_backpropagation_mlp_model(MLP* model,
+                                                                                  float* flattened_dataset_inputs,
+                                                                                  int flattened_dataset_inputs_size,
+                                                                                  float* flattened_dataset_expected_outputs,
+                                                                                  int flattened_dataset_expected_outputs_size,
+                                                                                  float alpha,
+                                                                                  int iterations_count){
+    model->train_stochastic_gradient_backpropagation(flattened_dataset_inputs,
+                                                     flattened_dataset_inputs_size,
+                                                     flattened_dataset_expected_outputs,
+                                                     flattened_dataset_expected_outputs_size,
+                                                     false,
+                                                     alpha,
+                                                     iterations_count);
 
-/*
-def train_regression_stochastic_gradient_backpropagation_mlp_model(model: MLP,
-                                                                       flattened_dataset_inputs: [float],
-                                                                       flattened_dataset_expected_outputs: [float],
-                                                                       alpha: float = 0.001,
-                                                                       iterations_count: int = 100000):
-  model.train_stochastic_gradient_backpropagation(flattened_dataset_inputs,
-                                                  flattened_dataset_expected_outputs,
-                                                  False,
-                                                  alpha,
-                                                  iterations_count)
+}
 
- */
+void freeW(Model3* W) {
+    for(int l=0; l < W->x ;l++){ //
+        int imax= W->y[l-1]+1;
+
+        if(l!=0) {
+            for (int i = 0; i < imax; i++) {
+
+                free(W->values[l][i]);
+
+            }
+        }
+        free(W->values[l]);
+    }
+
+    free(W->values);
+    free(W->y);
+    free(W);
+}
+
+void freeX(Model2* X) {
+    for(int l=0; l< X->x ;l++){ //
+        free(X->values[l]);
+    }
+
+    free(X->values);
+    free(X->y);
+    free(X);
+}
+
+DLLEXPORT void free_MLP(MLP* model){
+    freeX(model->deltas);
+    freeX(model->X);
+    freeW(model->W);
+    free(model->d->values);
+    free(model->d);
+    free(model);
+}

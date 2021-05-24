@@ -83,25 +83,6 @@ void printX(Model2* X){
     std::cout << "] "<< "\n";
 }
 
-void freeW(Model3* W) {
-    for(int l=0; l < W->x ;l++){ //
-        int imax= W->y[l-1]+1;
-
-        if(l!=0) {
-            for (int i = 0; i < imax; i++) {
-
-                free(W->values[l][i]);
-
-            }
-        }
-        free(W->values[l]);
-    }
-
-    free(W->values);
-    free(W->y);
-    free(W);
-}
-
 Model2* CreateModel2(int size){
     Model2* model2 = (Model2*) (malloc( sizeof(Model2)));
     model2->values = (float **) (malloc(sizeof(float **) * size));
@@ -119,6 +100,5 @@ float* TakeLast(Model2* model){
     for (int i = 1; i < model->y[xSize-1]; i++){
         tab[i-1] = model->values[xSize-1][i];
     }
-
     return tab;
 }

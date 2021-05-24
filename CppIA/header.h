@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <random>
+#include <cmath>
 #include <Eigen/Dense>
 
 using namespace std;

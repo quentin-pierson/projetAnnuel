@@ -12,10 +12,10 @@ DLLEXPORT Model* create_linear_model(int input_dim){
     model -> size = input_dim+1;
     model -> values = (float*) (malloc(sizeof(float) * model->size));
 
-    std::default_random_engine generator;
-    std::uniform_real_distribution<float> distribution(-1.0,1.0);
-
     for(int i=0 ; i<model->size ; i++){
+        std::random_device rd;
+        std::default_random_engine generator(rd());
+        std::uniform_real_distribution<float> distribution(-1.0, 1.0);
         model->values[i] = distribution(generator);
     }
 
