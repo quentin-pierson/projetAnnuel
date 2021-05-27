@@ -103,7 +103,8 @@ class MLPModel():
 
         result = []
 
-        maxi = int(model.d[0].values[2])
+        valuesSize = int(model.d[0].size) - 1
+        maxi = int(model.d[0].values[valuesSize])
 
         tab = self.mylib.predict_mlp_model_regression(model, sample_inputs_cast, sample_inputs_size)
 
@@ -123,7 +124,8 @@ class MLPModel():
 
         result = []
 
-        maxi = int(model.d[0].values[2])
+        valuesSize = int(model.d[0].size) -1
+        maxi = int(model.d[0].values[valuesSize])
 
         tab = self.mylib.predict_mlp_model_classification(model, sample_inputs_cast, sample_inputs_size)
 
@@ -140,7 +142,7 @@ class MLPModel():
     def train_classification_stochastic_gradient_backpropagation(self, model, flattened_dataset_inputs,
                                                                  flattened_dataset_expected_outputs,
                                                                  alpha=0.001,
-                                                                 iterations_count=100000):
+                                                                 iterations_count=10000):
         flattened_dataset_inputs_size = len(flattened_dataset_inputs)
 
         flattened_dataset_inputs_cast = cast((c_float * flattened_dataset_inputs_size)(*flattened_dataset_inputs),
