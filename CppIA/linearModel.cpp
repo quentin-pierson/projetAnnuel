@@ -97,6 +97,7 @@ DLLEXPORT void train_classification_rosenblatt_rule_linear_model(Model* model,
 DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model, int flattened_dataset_inputs_size, float* flattened_dataset_inputs ,
                                                              int flattened_dataset_expected_outputs_size, float* flattened_dataset_expected_output){
     int input_dim = model->size -2;
+
     int samples_count = flattened_dataset_inputs_size / input_dim;
 
     MatrixXf X(flattened_dataset_inputs_size,1); // define matrix
