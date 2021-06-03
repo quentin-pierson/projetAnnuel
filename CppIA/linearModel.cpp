@@ -41,8 +41,9 @@ DLLEXPORT float predict_linear_model_regression_unefficient_but_more_readable(Mo
 
     float result = 0.0;
     for(int i=0; i<model->size ; i++){
-        result+= model->values[i] * sample_inputs[i - 1];
+        result+= model->values[i] * sample_inputs_copy[i];
     }
+    cout << "result" << result << "\n";
     free(sample_inputs_copy);
     return result;
 }
@@ -98,14 +99,36 @@ DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model, int fl
                                                              int flattened_dataset_expected_outputs_size, float* flattened_dataset_expected_output){
     int input_dim = model->size -2;
 
+    if(input_dim == 0) input_dim = 1;
+
+    cout << "----------------------------------\n";
+    cout << "input_dim : " << input_dim << "\n\n";
+
+    for(int i =0; i < model->size;i++){
+        cout << "model value " << i << " : " << model->values[i] << "\n";
+    }
+    cout << "flattened_dataset_inputs_size : " << flattened_dataset_inputs_size << "\n";
+
     int samples_count = flattened_dataset_inputs_size / input_dim;
 
+    cout << "samples_count : " << samples_count << "\n";
+
     MatrixXf X(flattened_dataset_inputs_size,1); // define matrix
-    Vector3f vX (flattened_dataset_inputs);
+    VectorXf vX (flattened_dataset_inputs_size);
+
+    for(int i = 0; i<  flattened_dataset_inputs_size; i++){
+        vX[i] = flattened_dataset_inputs[i];
+    }
+
     X << vX;
 
     MatrixXf Y(flattened_dataset_expected_outputs_size,1); // define matrix
-    Vector3f vY (flattened_dataset_expected_output);
+    VectorXf vY (flattened_dataset_expected_outputs_size);
+
+    for(int i = 0; i<  flattened_dataset_expected_outputs_size; i++){
+        vY[i] = flattened_dataset_expected_output[i];
+    }
+
     Y << vY;
 
     MatrixXf ones(samples_count, 1);
@@ -128,5 +151,4 @@ DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model, int fl
         model->values[i] = a[i];
 
     }
-
 }

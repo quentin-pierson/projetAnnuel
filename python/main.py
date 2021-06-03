@@ -16,103 +16,103 @@ if __name__ == '__main__':
     #              Utilisation du Modèle linéaire pour la classification
     #----------------------------------------------------------------------------------
 
-    dataset_inputs = [
-        [1, 1],
-        [2, 3],
-        [3, 3]
-    ]
-
-    dataset_expected_outputs = [
-        1,
-        -1,
-        -1
-    ]
-
-
-    resultat = lm.create_linear_model(2)
-    model = resultat[0]
-
-    test_dataset = [[float(x1), float(x2)] for x1 in range(-10, 10) for x2 in range(-10, 10)]
-
-
-    colors = ["blue" if output >= 0 else "red" for output in dataset_expected_outputs]
-
-    predicted_outputs = [lm.predict_linear_model_classification(model, p) for p in test_dataset]
-    predicted_outputs_colors = ['blue' if label == 1 else 'red' for label in predicted_outputs]
-    plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
-    plt.scatter([p[0] for p in dataset_inputs], [p[1] for p in dataset_inputs], c=colors, s=200)
-    plt.show()
-
-    flattened_dataset_inputs = []
-    for p in dataset_inputs:
-        flattened_dataset_inputs.append(p[0])
-        flattened_dataset_inputs.append(p[1])
-
-
-    lm.train_classification_rosenblatt_rule_linear_model(model, flattened_dataset_inputs,
-                                                            dataset_expected_outputs, 0.002,10200)
-
-
-    predicted_outputs = [lm.predict_linear_model_classification(model, p) for p in test_dataset]
-
-    predicted_outputs_colors = ['blue' if label == 1 else 'red' for label in predicted_outputs]
-    plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
-    plt.scatter([p[0] for p in dataset_inputs], [p[1] for p in dataset_inputs], c=colors, s=200)
-    plt.show()
-
-    flattened_dataset_inputs = []
-    for p in dataset_inputs:
-        flattened_dataset_inputs.append(p[0])
-        flattened_dataset_inputs.append(p[1])
-
-
-    print("Je suis dead ", lm.destroy_linear_model(resultat))
+    # dataset_inputs = [
+    #     [1, 1],
+    #     [2, 3],
+    #     [3, 3]
+    # ]
+    #
+    # dataset_expected_outputs = [
+    #     1,
+    #     -1,
+    #     -1
+    # ]
+    #
+    #
+    # resultat = lm.create_linear_model(2)
+    # model = resultat[0]
+    #
+    # test_dataset = [[float(x1), float(x2)] for x1 in range(-10, 10) for x2 in range(-10, 10)]
+    #
+    #
+    # colors = ["blue" if output >= 0 else "red" for output in dataset_expected_outputs]
+    #
+    # predicted_outputs = [lm.predict_linear_model_classification(model, p) for p in test_dataset]
+    # predicted_outputs_colors = ['blue' if label == 1 else 'red' for label in predicted_outputs]
+    # plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
+    # plt.scatter([p[0] for p in dataset_inputs], [p[1] for p in dataset_inputs], c=colors, s=200)
+    # plt.show()
+    #
+    # flattened_dataset_inputs = []
+    # for p in dataset_inputs:
+    #     flattened_dataset_inputs.append(p[0])
+    #     flattened_dataset_inputs.append(p[1])
+    #
+    #
+    # lm.train_classification_rosenblatt_rule_linear_model(model, flattened_dataset_inputs,
+    #                                                         dataset_expected_outputs, 0.002,10200)
+    #
+    #
+    # predicted_outputs = [lm.predict_linear_model_classification(model, p) for p in test_dataset]
+    #
+    # predicted_outputs_colors = ['blue' if label == 1 else 'red' for label in predicted_outputs]
+    # plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
+    # plt.scatter([p[0] for p in dataset_inputs], [p[1] for p in dataset_inputs], c=colors, s=200)
+    # plt.show()
+    #
+    # flattened_dataset_inputs = []
+    # for p in dataset_inputs:
+    #     flattened_dataset_inputs.append(p[0])
+    #     flattened_dataset_inputs.append(p[1])
+    #
+    #
+    # print("Je suis dead ", lm.destroy_linear_model(resultat))
 
 
     # ----------------------------------------------------------------------------------
     #               Utilisation du Modèle linéaire pour la régression
     # ----------------------------------------------------------------------------------
 
-    # dataset_inputs = [
-    #     [-5],
-    #     [4],
-    #     [4]
-    #
-    # ]
-    #
-    # dataset_expected_outputs = [
-    #     5.2,
-    #     7,
-    #     8.5
-    # ]
-    #
-    # resultat2 = lm.create_linear_model(3)
-    # model2 = resultat2[0]
-    #
-    # flattened_dataset_inputs = []
-    # for p in dataset_inputs:
-    #     flattened_dataset_inputs.append(p[0])
-    #
-    # test_dataset_inputs = [i for i in range(-10, 11)]
-    # predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
-    #
-    #
-    # plt.plot(test_dataset_inputs, predicted_outputs)
-    # plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
-    # plt.axis([-10, 10, -10, 10])
-    # plt.show()
-    #
-    # lm.train_regression_pseudo_inverse_linear_model(model2, flattened_dataset_inputs, dataset_expected_outputs)
-    #
-    # test_dataset_inputs = [i for i in range(-10, 11)]
-    # predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
-    #
-    # plt.plot(test_dataset_inputs, predicted_outputs)
-    # plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
-    # plt.axis([-10, 10, -10, 10])
-    # plt.show()
-    #
-    # print("Je suis dead ", lm.destroy_linear_model(resultat2))
+    dataset_inputs = [
+        [-5],
+        [4],
+        [4]
+
+    ]
+
+    dataset_expected_outputs = [
+        5.2,
+        7,
+        8.5
+    ]
+
+    resultat2 = lm.create_linear_model(2)
+    model2 = resultat2[0]
+
+    flattened_dataset_inputs = []
+    for p in dataset_inputs:
+        flattened_dataset_inputs.append(p[0])
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
+
+
+    plt.plot(test_dataset_inputs, predicted_outputs)
+    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    plt.axis([-10, 10, -10, 10])
+    plt.show()
+
+    lm.train_regression_pseudo_inverse_linear_model(model2, flattened_dataset_inputs, dataset_expected_outputs)
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
+
+    plt.plot(test_dataset_inputs, predicted_outputs)
+    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    plt.axis([-10, 10, -10, 10])
+    plt.show()
+
+    print("Je suis dead ", lm.destroy_linear_model(resultat2))
 
     # ----------------------------------------------------------------------------------
     #               Utilisation du MLP pour la classification
@@ -287,8 +287,6 @@ if __name__ == '__main__':
     #               [0, 0, 1] if -p[0] - p[1] - 0.5 < 0 and p[1] < 0 and p[0] - p[1] - 0.5 > 0 else
     #               [0, 0, 0] for p in X])
     #
-    #
-    #
     # resultat7 = mlp.create_mlp_model([2, 3])
     # model7 = resultat7[0]
     # test_dataset = [[float(x1) / 20, float(x2) / 20] for x1 in range(-25, 25) for x2 in range(-25, 25)]
@@ -330,3 +328,43 @@ if __name__ == '__main__':
     # plt.show()
     #
     # mlp.free_MLP(resultat7)
+
+    # ----------------------------------------------------------------------------------
+    #               Utilisation du Modèle linéaire pour la régression //EXOS
+    # ----------------------------------------------------------------------------------
+
+    X = np.array([
+        [-4],
+        [2]
+    ])
+    Y = np.array([
+        2,
+        3
+    ])
+
+    resultat2 = lm.create_linear_model(1)
+    model2 = resultat2[0]
+
+    flattened_dataset_inputs = []
+    for p in X:
+        flattened_dataset_inputs.append(p[0])
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
+
+    plt.plot(test_dataset_inputs, predicted_outputs)
+    plt.scatter([p[0] for p in X], Y, s=200)
+    plt.axis([-10, 10, -10, 10])
+    plt.show()
+
+    lm.train_regression_pseudo_inverse_linear_model(model2, flattened_dataset_inputs, Y)
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
+
+    plt.plot(test_dataset_inputs, predicted_outputs)
+    plt.scatter([p[0] for p in X], Y, s=200)
+    plt.axis([-10, 10, -10, 10])
+    plt.show()
+
+    lm.destroy_linear_model(resultat2)

@@ -13,6 +13,7 @@ using Eigen::MatrixXf;
 using Eigen::Matrix2f;
 using Eigen::Matrix3f;
 using Eigen::Map;
+using Eigen::VectorXf;
 using Eigen::Vector3f;
 using Eigen::RowVectorXf;
 using Eigen::ArrayXf;
