@@ -6,6 +6,7 @@
 #include <random>
 #include <cmath>
 #include <Eigen/Dense>
+#include <ctime>
 
 using namespace std;
 using Eigen::Matrix;
@@ -21,6 +22,9 @@ using Eigen::ArrayXf;
 #ifndef CPPIA_HEADER_H
 #define CPPIA_HEADER_H
 #endif //CPPIA_HEADER_H
+
+#include <fstream>
+using std::fstream;
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #define DLLEXPORT extern "C" __declspec(dllexport)

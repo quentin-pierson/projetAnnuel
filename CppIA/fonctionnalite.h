@@ -11,6 +11,7 @@ float* copy_array(float* array, int size);
 float* insert_array(float* array, int size,int pos, float value);
 void printW(Model3* W);
 void printX(Model2* X);
+void freeX(Model2* W);
 void freeW(Model3* W);
 
 // linearModel
