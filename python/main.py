@@ -107,12 +107,50 @@ if __name__ == '__main__':
     test_dataset_inputs = [i for i in range(-10, 11)]
     predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
 
+    # save = lm.save_linear_model(model2)
+
+
     plt.plot(test_dataset_inputs, predicted_outputs)
     plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
     plt.axis([-10, 10, -10, 10])
     plt.show()
 
     print("Je suis dead ", lm.destroy_linear_model(resultat2))
+
+
+    # ----------------------------------------------------------------------------------
+    #               Utilisation du Modèle linéaire pour la régression avec load
+    # ----------------------------------------------------------------------------------
+
+    dataset_inputs = [
+        [-5],
+        [4],
+        [4]
+
+    ]
+
+    dataset_expected_outputs = [
+        5.2,
+        7,
+        8.5
+    ]
+
+    resultat3 = lm.load_linear_model("../Save/20200818.json")
+    model3 = resultat3[0]
+
+    flattened_dataset_inputs = []
+    for p in dataset_inputs:
+        flattened_dataset_inputs.append(p[0])
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [lm.predict_linear_model_regression(model3, [p]) for p in test_dataset_inputs]
+
+    plt.plot(test_dataset_inputs, predicted_outputs)
+    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    plt.axis([-10, 10, -10, 10])
+    plt.show()
+
+    print("Je suis dead ", lm.destroy_linear_model(resultat3))
 
     # ----------------------------------------------------------------------------------
     #               Utilisation du MLP pour la classification
@@ -333,38 +371,38 @@ if __name__ == '__main__':
     #               Utilisation du Modèle linéaire pour la régression //EXOS
     # ----------------------------------------------------------------------------------
 
-    X = np.array([
-        [-4],
-        [2]
-    ])
-    Y = np.array([
-        2,
-        3
-    ])
-
-    resultat2 = lm.create_linear_model(1)
-    model2 = resultat2[0]
-
-    flattened_dataset_inputs = []
-    for p in X:
-        flattened_dataset_inputs.append(p[0])
-
-    test_dataset_inputs = [i for i in range(-10, 11)]
-    predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
-
-    plt.plot(test_dataset_inputs, predicted_outputs)
-    plt.scatter([p[0] for p in X], Y, s=200)
-    plt.axis([-10, 10, -10, 10])
-    plt.show()
-
-    lm.train_regression_pseudo_inverse_linear_model(model2, flattened_dataset_inputs, Y)
-
-    test_dataset_inputs = [i for i in range(-10, 11)]
-    predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
-
-    plt.plot(test_dataset_inputs, predicted_outputs)
-    plt.scatter([p[0] for p in X], Y, s=200)
-    plt.axis([-10, 10, -10, 10])
-    plt.show()
-
-    lm.destroy_linear_model(resultat2)
+    # X = np.array([
+    #     [-4],
+    #     [2]
+    # ])
+    # Y = np.array([
+    #     2,
+    #     3
+    # ])
+    #
+    # resultat2 = lm.create_linear_model(1)
+    # model2 = resultat2[0]
+    #
+    # flattened_dataset_inputs = []
+    # for p in X:
+    #     flattened_dataset_inputs.append(p[0])
+    #
+    # test_dataset_inputs = [i for i in range(-10, 11)]
+    # predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
+    #
+    # plt.plot(test_dataset_inputs, predicted_outputs)
+    # plt.scatter([p[0] for p in X], Y, s=200)
+    # plt.axis([-10, 10, -10, 10])
+    # plt.show()
+    #
+    # lm.train_regression_pseudo_inverse_linear_model(model2, flattened_dataset_inputs, Y)
+    #
+    # test_dataset_inputs = [i for i in range(-10, 11)]
+    # predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
+    #
+    # plt.plot(test_dataset_inputs, predicted_outputs)
+    # plt.scatter([p[0] for p in X], Y, s=200)
+    # plt.axis([-10, 10, -10, 10])
+    # plt.show()
+    #
+    # lm.destroy_linear_model(resultat2)
