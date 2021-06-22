@@ -207,35 +207,6 @@ DLLEXPORT void train_regression_stochastic_gradient_backpropagation_mlp_model(ML
 
 }
 
-void freeW(Model3* W) {
-    for(int l=0; l < W->x ;l++){ //
-        int imax= W->y[l-1]+1;
-
-        if(l!=0) {
-            for (int i = 0; i < imax; i++) {
-
-                free(W->values[l][i]);
-
-            }
-        }
-        free(W->values[l]);
-    }
-
-    free(W->values);
-    free(W->y);
-    free(W);
-}
-
-void freeX(Model2* X) {
-    for(int l=0; l< X->x ;l++){ //
-        free(X->values[l]);
-    }
-
-    free(X->values);
-    free(X->y);
-    free(X);
-}
-
 DLLEXPORT void free_MLP(MLP* model){
     freeX(model->deltas);
     freeX(model->X);
