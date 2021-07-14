@@ -9,12 +9,11 @@ import tqdm
 lm = linearModel()
 mlp = MLPModel()
 
-
 if __name__ == '__main__':
 
-    #----------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------
     #              Utilisation du Modèle linéaire pour la classification
-    #----------------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------------
 
     # dataset_inputs = [
     #     [1, 1],
@@ -68,92 +67,149 @@ if __name__ == '__main__':
     #
     # print("Je suis dead ", lm.destroy_linear_model(resultat))
 
-
     # ----------------------------------------------------------------------------------
     #               Utilisation du Modèle linéaire pour la régression
     # ----------------------------------------------------------------------------------
 
-    dataset_inputs = [
-        [-5],
-        [4],
-        [4]
-
-    ]
-
-    dataset_expected_outputs = [
-        5.2,
-        7,
-        8.5
-    ]
-
-    resultat2 = lm.create_linear_model(2)
-    model2 = resultat2[0]
-
-    flattened_dataset_inputs = []
-    for p in dataset_inputs:
-        flattened_dataset_inputs.append(p[0])
-
-    test_dataset_inputs = [i for i in range(-10, 11)]
-    predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
-
-
-    plt.plot(test_dataset_inputs, predicted_outputs)
-    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
-    plt.axis([-10, 10, -10, 10])
-    plt.show()
-
-    lm.train_regression_pseudo_inverse_linear_model(model2, flattened_dataset_inputs, dataset_expected_outputs)
-
-    test_dataset_inputs = [i for i in range(-10, 11)]
-    predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
-
-    # save = lm.save_linear_model(model2)
-
-
-    plt.plot(test_dataset_inputs, predicted_outputs)
-    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
-    plt.axis([-10, 10, -10, 10])
-    plt.show()
-
-    print("Je suis dead ", lm.destroy_linear_model(resultat2))
-
+    # dataset_inputs = [
+    #     [-5],
+    #     [4],
+    #     [4]
+    #
+    # ]
+    #
+    # dataset_expected_outputs = [
+    #     5.2,
+    #     7,
+    #     8.5
+    # ]
+    #
+    # resultat2 = lm.create_linear_model(2)
+    # model2 = resultat2[0]
+    #
+    # flattened_dataset_inputs = []
+    # for p in dataset_inputs:
+    #     flattened_dataset_inputs.append(p[0])
+    #
+    # test_dataset_inputs = [i for i in range(-10, 11)]
+    # predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
+    #
+    #
+    # plt.plot(test_dataset_inputs, predicted_outputs)
+    # plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    # plt.axis([-10, 10, -10, 10])
+    # plt.show()
+    #
+    # lm.train_regression_pseudo_inverse_linear_model(model2, flattened_dataset_inputs, dataset_expected_outputs)
+    #
+    # test_dataset_inputs = [i for i in range(-10, 11)]
+    # predicted_outputs = [lm.predict_linear_model_regression(model2, [p]) for p in test_dataset_inputs]
+    #
+    # # save = lm.save_linear_model(model2)
+    #
+    #
+    # plt.plot(test_dataset_inputs, predicted_outputs)
+    # plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    # plt.axis([-10, 10, -10, 10])
+    # plt.show()
+    #
+    # lm.save_linear_model(model2)
+    #
+    # print("Je suis dead ", lm.destroy_linear_model(resultat2))
 
     # ----------------------------------------------------------------------------------
     #               Utilisation du Modèle linéaire pour la régression avec load
     # ----------------------------------------------------------------------------------
 
-    dataset_inputs = [
-        [-5],
-        [4],
-        [4]
+    # dataset_inputs = [
+    #     [-5],
+    #     [4],
+    #     [4]
+    #
+    # ]
+    #
+    # dataset_expected_outputs = [
+    #     5.2,
+    #     7,
+    #     8.5
+    # ]
+    #
+    # resultat3 = lm.load_linear_model("../Save/20200818.json")
+    # model3 = resultat3[0]
+    #
+    # flattened_dataset_inputs = []
+    # for p in dataset_inputs:
+    #     flattened_dataset_inputs.append(p[0])
+    #
+    # test_dataset_inputs = [i for i in range(-10, 11)]
+    # predicted_outputs = [lm.predict_linear_model_regression(model3, [p]) for p in test_dataset_inputs]
+    #
+    # plt.plot(test_dataset_inputs, predicted_outputs)
+    # plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    # plt.axis([-10, 10, -10, 10])
+    # plt.show()
+    #
+    # print("Je suis dead ", lm.destroy_linear_model(resultat3))
 
+    # ----------------------------------------------------------------------------------
+    #               Utilisation du MLP pour la classification
+    # ----------------------------------------------------------------------------------
+
+    dataset_inputs = [
+        [0, 0],
+        [1, 1],
+        [0, 1],
+        [1, 0],
     ]
 
     dataset_expected_outputs = [
-        5.2,
-        7,
-        8.5
+        -1,
+        -1,
+        1,
+        1,
     ]
 
-    resultat3 = lm.load_linear_model("../Save/20200818.json")
+    resultat3 = mlp.create_mlp_model([2, 2,1])
     model3 = resultat3[0]
+
+    test_dataset = [[x1 / 10, x2 / 10] for x1 in range(-10, 20) for x2 in range(-10, 20)]
+    colors = ["blue" if output >= 0 else "red" for output in dataset_expected_outputs]
+
+    predicted_outputs = [mlp.predict_mlp_model_classification(model3, p) for p in test_dataset]
+
+    predicted_outputs_colors = ['blue' if label >= 0 else 'red' for label in predicted_outputs]
+    plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
+    plt.scatter([p[0] for p in dataset_inputs], [p[1] for p in dataset_inputs], c=colors, s=200)
+    plt.show()
 
     flattened_dataset_inputs = []
     for p in dataset_inputs:
         flattened_dataset_inputs.append(p[0])
+        flattened_dataset_inputs.append(p[1])
 
-    test_dataset_inputs = [i for i in range(-10, 11)]
-    predicted_outputs = [lm.predict_linear_model_regression(model3, [p]) for p in test_dataset_inputs]
+    mlp.train_classification_stochastic_gradient_backpropagation(model3,
+                                                                 flattened_dataset_inputs,
+                                                                 dataset_expected_outputs,
+                                                                 alpha=0.001,
+                                                                 iterations_count=1000000)
 
-    plt.plot(test_dataset_inputs, predicted_outputs)
-    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
-    plt.axis([-10, 10, -10, 10])
+    predicted_outputs = [mlp.predict_mlp_model_classification(model3, p) for p in test_dataset]
+    predicted_outputs_colors = ['blue' if label >= 0 else 'red' for label in predicted_outputs]
+    plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
+    plt.scatter([p[0] for p in dataset_inputs], [p[1] for p in dataset_inputs], c=colors, s=200)
     plt.show()
 
-    print("Je suis dead ", lm.destroy_linear_model(resultat3))
+    flattened_dataset_inputs = []
+    for p in dataset_inputs:
+        flattened_dataset_inputs.append(p[0])
+        flattened_dataset_inputs.append(p[1])
+
+    mlp.save_mlp_classification(model3)
+
+    mlp.free_MLP(resultat3)
 
     # ----------------------------------------------------------------------------------
-    #               Utilisation du MLP pour la classification
+    #               Utilisation du MLP pour la classification avec load
     # ----------------------------------------------------------------------------------
 
     # dataset_inputs = [
@@ -169,50 +225,72 @@ if __name__ == '__main__':
     #     1,
     #     1,
     # ]
-    # # mlp.create_mlp_model([2, 2, 1])
-    # resultat3 = mlp.create_mlp_model([2,1])
-    # model3 = resultat3[0]
     #
+    # resultat3 = mlp.load_mlp_model("../Save/mlp_2_2_1_classification_2021713122135.json")
+    # model3 = resultat3[0]
     #
     # test_dataset = [[x1 / 10, x2 / 10] for x1 in range(-10, 20) for x2 in range(-10, 20)]
     # colors = ["blue" if output >= 0 else "red" for output in dataset_expected_outputs]
     #
     # predicted_outputs = [mlp.predict_mlp_model_classification(model3, p) for p in test_dataset]
     #
-    # print(" Je suis predicted_outputs: ", predicted_outputs)
-    #
     # predicted_outputs_colors = ['blue' if label >= 0 else 'red' for label in predicted_outputs]
     # plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
     # plt.scatter([p[0] for p in dataset_inputs], [p[1] for p in dataset_inputs], c=colors, s=200)
     # plt.show()
-    #
-    # flattened_dataset_inputs = []
-    # for p in dataset_inputs:
-    #     flattened_dataset_inputs.append(p[0])
-    #     flattened_dataset_inputs.append(p[1])
-    #
-    # mlp.train_classification_stochastic_gradient_backpropagation(model3,
-    #                                                                    flattened_dataset_inputs,
-    #                                                                    dataset_expected_outputs,
-    #                                                                    alpha=0.001,
-    #                                                                    iterations_count=1000000)
-    #
-    #
-    # predicted_outputs = [mlp.predict_mlp_model_classification(model3, p) for p in test_dataset]
-    # predicted_outputs_colors = ['blue' if label >= 0 else 'red' for label in predicted_outputs]
-    # plt.scatter([p[0] for p in test_dataset], [p[1] for p in test_dataset], c=predicted_outputs_colors)
-    # plt.scatter([p[0] for p in dataset_inputs], [p[1] for p in dataset_inputs], c=colors, s=200)
-    # plt.show()
-    #
-    # flattened_dataset_inputs = []
-    # for p in dataset_inputs:
-    #     flattened_dataset_inputs.append(p[0])
-    #     flattened_dataset_inputs.append(p[1])
     #
     # mlp.free_MLP(resultat3)
 
     # ----------------------------------------------------------------------------------
     #               Utilisation du MLP pour la regression
+    # ----------------------------------------------------------------------------------
+
+    dataset_inputs = [
+        [-5],
+        [4],
+        [6],
+    ]
+
+    dataset_expected_outputs = [
+        1.2,
+        7,
+        8.3
+    ]
+
+    resultat5 = mlp.create_mlp_model([1, 3, 1])
+
+    model5 = resultat5[0]
+
+    flattened_dataset_inputs = []
+    for p in dataset_inputs:
+        flattened_dataset_inputs.append(p[0])
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [mlp.predict_mlp_model_regression(model5, [p]) for p in test_dataset_inputs]
+
+    plt.plot(test_dataset_inputs, predicted_outputs)
+    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    plt.axis([-10, 10, -10, 10])
+    plt.show()
+
+    mlp.train_regression_stochastic_gradient_backpropagation(model5,
+                                                             flattened_dataset_inputs,
+                                                             dataset_expected_outputs)
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [mlp.predict_mlp_model_regression(model5, [p]) for p in test_dataset_inputs]
+
+    plt.plot(test_dataset_inputs, predicted_outputs)
+    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    plt.axis([-10, 10, -10, 10])
+    plt.show()
+
+    mlp.save_mlp_regression(model5)
+
+    mlp.free_MLP(resultat5)
+
+    # ----------------------------------------------------------------------------------
+    #               Utilisation du MLP pour la regression avec load
     # ----------------------------------------------------------------------------------
 
     # dataset_inputs = [
@@ -227,34 +305,23 @@ if __name__ == '__main__':
     #     8.3
     # ]
     #
-    # resultat5 = mlp.create_mlp_model([1, 3, 1])
-    # model5 = resultat5[0]
+    # resultat6 = mlp.load_mlp_model("../Save/mlp_1_3_1_regression_2021713122135.json")
+    #
+    # model6 = resultat6[0]
     #
     # flattened_dataset_inputs = []
     # for p in dataset_inputs:
     #     flattened_dataset_inputs.append(p[0])
     #
     # test_dataset_inputs = [i for i in range(-10, 11)]
-    # predicted_outputs = [mlp.predict_mlp_model_regression(model5, [p]) for p in test_dataset_inputs]
+    # predicted_outputs = [mlp.predict_mlp_model_regression(model6, [p]) for p in test_dataset_inputs]
     #
     # plt.plot(test_dataset_inputs, predicted_outputs)
     # plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
     # plt.axis([-10, 10, -10, 10])
     # plt.show()
     #
-    # mlp.train_regression_stochastic_gradient_backpropagation(model5,
-    #                                                                flattened_dataset_inputs,
-    #                                                                dataset_expected_outputs)
-    #
-    # test_dataset_inputs = [i for i in range(-10, 11)]
-    # predicted_outputs = [mlp.predict_mlp_model_regression(model5, [p]) for p in test_dataset_inputs]
-    #
-    # plt.plot(test_dataset_inputs, predicted_outputs)
-    # plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
-    # plt.axis([-10, 10, -10, 10])
-    # plt.show()
-    #
-    # mlp.free_MLP(resultat5)
+    # mlp.free_MLP(resultat6)
 
     # ----------------------------------------------------------------------------------
     #               Utilisation du MLP pour de la classification à 3 classes

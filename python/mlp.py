@@ -89,6 +89,25 @@ class MLPModel():
         self.mylib.free_MLP.argtype = [POINTER(ModelMlp)]
         self.mylib.free_MLP.restype = c_void_p
 
+        # ----------------------------------------------------------------------------------
+        #               mylib = save mlp model
+        # ----------------------------------------------------------------------------------
+
+        self.mylib.save_mlp_regression.argtype = [POINTER(ModelMlp)]
+        self.mylib.save_mlp_regression.restype = c_void_p
+
+        # ----------------------------------------------------------------------------------
+        #               mylib = save mlp model
+        # ----------------------------------------------------------------------------------
+
+        self.mylib.save_mlp_classification.argtype = [POINTER(ModelMlp)]
+        self.mylib.save_mlp_classification.restype = c_void_p
+
+        # ----------------------------------------------------------------------------------
+        #               mylib = load mlp model
+        # ----------------------------------------------------------------------------------
+        self.mylib.load_mlp_model.argtype = [c_char_p]
+        self.mylib.load_mlp_model.restype = POINTER(ModelMlp)
 
     def create_mlp_model(self, npl):
         npl_size = len(npl)
@@ -124,7 +143,7 @@ class MLPModel():
 
         result = []
 
-        valuesSize = int(model.d[0].size) -1
+        valuesSize = int(model.d[0].size) - 1
         maxi = int(model.d[0].values[valuesSize])
 
         tab = self.mylib.predict_mlp_model_classification(model, sample_inputs_cast, sample_inputs_size)
@@ -138,7 +157,6 @@ class MLPModel():
 
         return result
 
-
     def train_classification_stochastic_gradient_backpropagation(self, model, flattened_dataset_inputs,
                                                                  flattened_dataset_expected_outputs,
                                                                  alpha=0.001,
@@ -150,17 +168,16 @@ class MLPModel():
 
         flattened_dataset_expected_outputs_size = len(flattened_dataset_expected_outputs)
 
-        flattened_dataset_expected_outputs_cast = cast((c_float * flattened_dataset_expected_outputs_size)(*flattened_dataset_expected_outputs),
-                                                       self.c_float_p)
+        flattened_dataset_expected_outputs_cast = cast(
+            (c_float * flattened_dataset_expected_outputs_size)(*flattened_dataset_expected_outputs),
+            self.c_float_p)
 
         self.mylib.train_classification_stochastic_gradient_backpropagation_mlp_model(model,
-                                                                                             flattened_dataset_inputs_cast,
-                                                                                             flattened_dataset_inputs_size,
-                                                                                             flattened_dataset_expected_outputs_cast,
-                                                                                             flattened_dataset_expected_outputs_size,
-                                                                                             c_float(alpha), iterations_count)
-
-
+                                                                                      flattened_dataset_inputs_cast,
+                                                                                      flattened_dataset_inputs_size,
+                                                                                      flattened_dataset_expected_outputs_cast,
+                                                                                      flattened_dataset_expected_outputs_size,
+                                                                                      c_float(alpha), iterations_count)
 
     def train_regression_stochastic_gradient_backpropagation(self,
                                                              model,
@@ -179,10 +196,24 @@ class MLPModel():
             (c_float * flattened_dataset_expected_outputs_size)(*flattened_dataset_expected_outputs),
             self.c_float_p)
 
-        self.mylib.train_regression_stochastic_gradient_backpropagation_mlp_model(model,flattened_dataset_inputs_cast,flattened_dataset_inputs_size,
-                                                                                         flattened_dataset_expected_outputs_cast, flattened_dataset_expected_outputs_size,
-                                                                                         c_float(alpha),
-                                                                                         iterations_count)
+        self.mylib.train_regression_stochastic_gradient_backpropagation_mlp_model(model, flattened_dataset_inputs_cast,
+                                                                                  flattened_dataset_inputs_size,
+                                                                                  flattened_dataset_expected_outputs_cast,
+                                                                                  flattened_dataset_expected_outputs_size,
+                                                                                  c_float(alpha),
+                                                                                  iterations_count)
 
     def free_MLP(self, model):
         self.mylib.free_MLP(model)
+
+    def save_mlp_regression(self, model):
+        self.mylib.save_mlp_regression(model)
+
+    def save_mlp_classification(self,model):
+        self.mylib.save_mlp_classification(model)
+
+    def load_mlp_model(self, filename):
+        filename_b = filename.encode('utf-8')
+
+        return self.mylib.load_mlp_model(filename_b)
+
