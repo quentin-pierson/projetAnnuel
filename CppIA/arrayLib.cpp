@@ -47,6 +47,26 @@ float* insert_array(float* array, int size,int pos, float value){
     return new_array;
 }
 
+void printArray(float* array, int size){
+    std::cout << "[ ";
+
+    for(int i = 0; i < size; i++){
+        std::cout << array[i] << ", ";
+    }
+
+    std::cout << "] "<< "\n";
+}
+
+void printArray(Model* model){
+    std::cout << "[ ";
+
+    for(int i = 0; i < model->size; i++){
+        std::cout << model->values[i] << ", ";
+    }
+
+    std::cout << "] "<< "\n";
+}
+
 void printW(Model3* W){
     std::cout << "[ ";
     for(int l=0; l< W->x ;l++){ //
@@ -83,6 +103,13 @@ void printX(Model2* X){
     std::cout << "] "<< "\n";
 }
 
+Model* CreateModel(float* array, int size){
+    Model* model = (Model*) (malloc(sizeof(Model)));
+    model->size = size;
+    model->values = copy_array(array, size);
+    return model;
+}
+
 Model2* CreateModel2(int size){
     Model2* model2 = (Model2*) (malloc( sizeof(Model2)));
     model2->values = (float **) (malloc(sizeof(float **) * size));
@@ -91,6 +118,23 @@ Model2* CreateModel2(int size){
     model2->y = (int *) (malloc(sizeof(int) * size));
 
     return model2;
+}
+
+Model2* model2_set_zero(int x, int y){
+    Model2* model = CreateModel2(x);
+
+    for(int i = 0; i < x; i +=1){
+        model->y[i] = y;
+    }
+
+    for(int i = 0; i < x; i+=1){
+        model->values[i] = (float *) (malloc(sizeof(float *) * y));
+        for(int j = 0; j < y; j+=1){
+            model->values[i][j] = 0.0f;
+        }
+    }
+
+    return model;
 }
 
 float* TakeLast(Model2* model){
@@ -130,4 +174,23 @@ void freeX(Model2* X) {
     free(X->values);
     free(X->y);
     free(X);
+}
+
+int minimumArray(float* array , int sizeArray){
+    int min = INT_MAX;
+    for (int i=0 ; i < sizeArray; i++){
+        if(i < min) {
+            min = i;
+        }
+    }
+    return min;
+}
+
+int maximumArray(float * array,int sizeArray) {
+    int max = INT_MIN;
+    for (int i = 0; i < sizeArray; i++) {
+        if (i > max) {
+            max = i;
+        }
+    }
 }

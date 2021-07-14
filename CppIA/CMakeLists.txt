@@ -3,7 +3,7 @@ project(CppIA)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_library(CppIA SHARED library.cpp linearModel.cpp header.h structCollection.cpp arrayLib.cpp fonctionnalite.h mlp.cpp rbf.cpp)
+add_library(CppIA SHARED library.cpp linearModel.cpp header.h structCollection.cpp arrayLib.cpp fonctionnalite.h mlp.cpp rbf.cpp saveNload.cpp mlp.h rbf.h)
 #add_executable(library library.cpp linearModel.cpp header.h structCollection.cpp arrayLib.cpp fonctionnalite.h mlp.cpp)
 
 include_directories("${PROJECT_SOURCE_DIR}//Eigen")

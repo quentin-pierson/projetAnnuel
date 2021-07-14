@@ -7,6 +7,7 @@
 #include <cmath>
 #include <Eigen/Dense>
 #include <ctime>
+#include <string>
 
 using namespace std;
 using Eigen::Matrix;
@@ -18,6 +19,7 @@ using Eigen::VectorXf;
 using Eigen::Vector3f;
 using Eigen::RowVectorXf;
 using Eigen::ArrayXf;
+
 
 #ifndef CPPIA_HEADER_H
 #define CPPIA_HEADER_H
