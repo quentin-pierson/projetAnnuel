@@ -14,9 +14,9 @@ The goal of the project is to recognize musical genres from a given music input
 ```
 
 ## Language used
-- Python[https://www.python.org/]
-- C++[https://www.cplusplus.com/]
-- 
+- [Python](https://www.python.org/)
+- [C++](https://www.cplusplus.com/)
+
 ## Contributors
 
 - [Quentin Pierson](https://github.com/quentin-pierson)
