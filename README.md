@@ -17,9 +17,15 @@ The goal of the project is to recognize musical genres from a given music input
 
 To build your DDL, visit the Microsoft site
 
+## Launch web app
+```
+flask run
+```
+
 ## Language used
 - [Python](https://www.python.org/)
 - [C++](https://www.cplusplus.com/)
+- [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page)
 
 ## Contributors
 
