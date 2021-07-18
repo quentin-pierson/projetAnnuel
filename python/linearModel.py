@@ -89,7 +89,7 @@ class linearModel():
         #               mylib = load linear model
         # ----------------------------------------------------------------------------------
         self.mylib.load_linear_model.argtype = [c_char_p]
-        self.mylib.load_linear_model.restype = c_void_p
+        self.mylib.load_linear_model.restype = POINTER(Model)
 
     def create_linear_model(self, input_dim):
         result = self.mylib.create_linear_model(input_dim)
