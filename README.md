@@ -1,7 +1,6 @@
 # projetAnnuel
 
-- Classification des genres de musique
-- Reconnaitre des animaux
+The goal of the project is to recognize musical genres from a given music input 
 
 ## Constitution du dataset 
 - Prise des musiques sur Youtube. 
@@ -14,6 +13,10 @@
 2. pip install -r pip install -r requirements.txt
 ```
 
+## Language used
+- Python[https://www.python.org/]
+- C++[https://www.cplusplus.com/]
+- 
 ## Contributors
 
 - [Quentin Pierson](https://github.com/quentin-pierson)
