@@ -18,9 +18,12 @@ void printW(Model3* W);
 void printX(Model2* X);
 void freeX(Model2* W);
 void freeW(Model3* W);
-int minimumArray(float* array , int sizeArray);
-int maximumArray(float * array,int sizeArray);
-
+int minimumArray(int* array , int sizeArray);
+int maximumArray(int* array,int sizeArray);
+float maximumArray(float *array, int sizeArray);
+float summArray(float** array);
+float* mean(float* array);
+Model2* repeatArray(Model2* array, int size, int k);
 
 // linearModel
 DLLEXPORT void destroy_linear_model(Model* model);

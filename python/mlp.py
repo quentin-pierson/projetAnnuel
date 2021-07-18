@@ -90,14 +90,14 @@ class MLPModel():
         self.mylib.free_MLP.restype = c_void_p
 
         # ----------------------------------------------------------------------------------
-        #               mylib = save mlp model
+        #               mylib = save mlp model for regression
         # ----------------------------------------------------------------------------------
 
         self.mylib.save_mlp_regression.argtype = [POINTER(ModelMlp)]
         self.mylib.save_mlp_regression.restype = c_void_p
 
         # ----------------------------------------------------------------------------------
-        #               mylib = save mlp model
+        #               mylib = save mlp model for classification
         # ----------------------------------------------------------------------------------
 
         self.mylib.save_mlp_classification.argtype = [POINTER(ModelMlp)]

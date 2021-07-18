@@ -153,9 +153,14 @@ DLLEXPORT void train_regression_pseudo_inverse_linear_model(Model* model, int fl
     }
 }
 
-DLLEXPORT void save_linear_model(Model* model){
+DLLEXPORT void save_linear_model_regression(Model* model){
     string data = save_model(model);
-    save_in_json("linear_model_",data);
+    save_in_json("linear_model_regression_",data);
+}
+
+DLLEXPORT void save_linear_model_classification(Model* model){
+    string data = save_model(model);
+    save_in_json("linear_model_classification_",data);
 }
 
 DLLEXPORT Model* load_linear_model(char* filename) {

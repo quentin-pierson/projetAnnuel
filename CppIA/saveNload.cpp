@@ -143,7 +143,7 @@ void save_in_json(string name, string data) {
     tm *ltm = localtime(&date);
 
 
-    string filename = "../save/" + name + to_string(1900 + ltm->tm_year)
+    string filename = "../../Save/" + name + to_string(1900 + ltm->tm_year)
                       + to_string(1 + ltm->tm_mon) + to_string(ltm->tm_mday)
                       + to_string(ltm->tm_hour) + to_string(ltm->tm_min)
                       + to_string(ltm->tm_sec) + ".json";
