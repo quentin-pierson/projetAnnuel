@@ -14,6 +14,7 @@ The goal of the project is to recognize musical genres from a given music input
 ```
 
 > :warning: **To make the project work you have to change the path of your DDL**: The file is located at the root of the python in path_to_dll.py <br>
+
 To build your DDL, visit the Microsoft site
 
 ## Language used
