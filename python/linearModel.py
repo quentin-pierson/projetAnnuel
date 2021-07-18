@@ -70,11 +70,20 @@ class linearModel():
         self.mylib.train_regression_pseudo_inverse_linear_model.restype = c_void_p
 
         # ----------------------------------------------------------------------------------
-        #               mylib = save linear model
+        #               mylib = save linear model regression
         # ----------------------------------------------------------------------------------
 
-        self.mylib.save_linear_model.argtype = [POINTER(Model)]
-        self.mylib.save_linear_model.restype = c_void_p
+        self.mylib.save_linear_model_regression.argtype = [POINTER(Model)]
+        self.mylib.save_linear_model_regression.restype = c_void_p
+
+        # ----------------------------------------------------------------------------------
+        #               mylib = save linear model classification
+        # ----------------------------------------------------------------------------------
+
+
+        self.mylib.save_linear_model_classification.argtype = [POINTER(Model)]
+        self.mylib.save_linear_model_classification.restype = c_void_p
+
 
         # ----------------------------------------------------------------------------------
         #               mylib = load linear model
@@ -137,8 +146,11 @@ class linearModel():
                                                                 flattened_dataset_expected_outputs_size,
                                                                 flattened_dataset_expected_outputs_cast)
 
-    def save_linear_model(self, model):
-        self.mylib.save_linear_model(model)
+    def save_linear_model_regression(self, model):
+        self.mylib.save_linear_model_regression(model)
+
+    def save_linear_model_classification(self, model):
+        self.mylib.save_linear_model_classification(model)
 
     def load_linear_model(self,filename):
         filename_b = filename.encode('utf-8')
