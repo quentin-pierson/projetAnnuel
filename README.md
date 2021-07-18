@@ -8,8 +8,8 @@
 - Scrapper musique depuis Soundcloud.
 
 ## Project installation 
-1. > git clonne https://github.com/quentin-pierson/projetAnnuel
-2. > pip install -r pip install -r requirements.txt
+>1. git clonne https://github.com/quentin-pierson/projetAnnuel
+>2. pip install -r pip install -r requirements.txt
 
 ## Contributors
 
