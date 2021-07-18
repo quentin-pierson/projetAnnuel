@@ -128,11 +128,12 @@ void save_mlp_model(MLP *mlp, string type) {
 
     string name = "mlp_";
 
+    name += type+ "_";
+
     for (int i = 0; i < mlp->W->x; i += 1) {
         name += to_string(mlp->W->y[i]) + "_";
     }
 
-    name += type+ "_";
 
     save_in_json(name, data);
 }

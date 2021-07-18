@@ -4,4 +4,7 @@
 cmake-build-debug/
 python/__pycache__/
 CppIA/Eigen/
-python/path_to_dll.py
+Save/
+data/test
+data/train
+
