@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Classicaux IA</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" disabled>Classicaux IA</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">Modèles enregistrés</a></li>
+                    <li><a href="/launchModel">Lancer un modèle</a></li>
+                </ul>
+                <button class="btn btn-danger navbar-btn">Générer un rapport</button>
+            </div>
+        </nav>
+          
+        <div class="container">
+            <h1>Classification des genres musicaux</h1>      
+            <p>L'objectif de ce projet est de catégoriser des musiques par genre musicaux grâce à des modèles algorithmique.</p>
+        </div>
+
+        <div class="container">
+            <form class="form-inline" action="result.html">
+                <div class="form-group mb-2">
+                    <select class="form-control" aria-label="Default select example" id="modeleSelection" onchange="updateModeleSelection(event)">
+                        <option selected value="none">Sélectioner le type de votre modèle</option>
+                        <option id="lineaire" value="lineaire">Linéaire</option>
+                        <option id="mlp" value="mlp">MLP</option>
+                        <option id="rbf" value="rbf">RBF</option>
+                    </select>
+                </div>
+                <div class="form-group mb-2">
+                    <button id="btnModeleSelection" class="btn btn-success" id="postData" onclick="getAndPostResult()">Valider</button>
+                </div>
+            </form>
+            <br>
+            <form class="form" id="myForm">
+            </form>
+        </div>
+    </body>
+    <script>
+        function updateModeleSelection(evt) {
+            if (evt.target.value === "lineaire") {
+                $("#myForm").empty();
+
+                ////////////////////////////////////////////////////////
+                var div_form_group_learning_rate = document.createElement("div");
+                div_form_group_learning_rate.setAttribute('class','form-group mb-2');
+                div_form_group_learning_rate.setAttribute('id', 'learningRate');
+
+                var div_form_group_iterations_count = document.createElement("div");
+                div_form_group_iterations_count.setAttribute('class','form-group mb-2');
+                div_form_group_iterations_count.setAttribute('id', 'iterationsCount');
+
+                ////////////////////////////////////////////////////////
+                var label_learning_rate = document.createElement("label");
+                label_learning_rate.innerHTML = "Learning rate: ";
+
+                var learning_rate = document.createElement("input");
+                learning_rate.setAttribute('class', 'form-control');
+                learning_rate.setAttribute('type', 'text');
+                learning_rate.setAttribute('id', 'learning_rate');
+                learning_rate.setAttribute('placeholder', 'Valeur entre 0 et 1');
+
+                ////////////////////////////////////////////////////////
+                var label_iterations_count = document.createElement("label");
+                label_iterations_count.innerHTML = "Iteration count:";
+
+                var iterations_count = document.createElement("input");
+                iterations_count.setAttribute('class', 'form-control');
+                iterations_count.setAttribute('type', 'text');
+                iterations_count.setAttribute('id', 'iterations_count');
+                iterations_count.setAttribute('placeholder', 'Valeur entière');
+
+                ////////////////////////////////////////////////////////
+                document.getElementById("myForm").appendChild(div_form_group_learning_rate);
+                document.getElementById("learningRate").appendChild(label_learning_rate);
+                document.getElementById("learningRate").appendChild(learning_rate);
+
+                document.getElementById("myForm").appendChild(div_form_group_iterations_count);
+                document.getElementById("iterationsCount").appendChild(label_iterations_count);
+                document.getElementById("iterationsCount").appendChild(iterations_count);
+
+            } else if (evt.target.value === "mlp") {
+                $("#myForm").empty();
+                                               
+                ////////////////////////////////////////////////////////
+                // var div_form_group_input_dim = document.createElement("div");
+                // div_form_group_input_dim.setAttribute('class','form-group mb-2');
+                // div_form_group_input_dim.setAttribute('id', 'inputDim');
+
+                var div_form_group_hidden_layer = document.createElement("div");
+                div_form_group_hidden_layer.setAttribute('class','form-group mb-2');
+                div_form_group_hidden_layer.setAttribute('id', 'hiddenLayer');
+
+                // var div_form_group_output_layer = document.createElement("div");
+                // div_form_group_output_layer.setAttribute('class','form-group mb-2');
+                // div_form_group_output_layer.setAttribute('id', 'outputLayer');
+
+                ////////////////////////////////////////////////////////
+                // var label_input_dim = document.createElement("label");
+                // label_input_dim.innerHTML = "Input dimension: ";
+
+                // var input_dim = document.createElement("input");
+                // input_dim.setAttribute('class', 'form-control');
+                // input_dim.setAttribute('type', 'text');
+                // input_dim.setAttribute('id', 'input_dim');
+                // input_dim.setAttribute('placeholder', 'Valeur entière');
+
+                ////////////////////////////////////////////////////////
+                var label_hidden_layer = document.createElement("label");
+                label_hidden_layer.innerHTML = "Hidden layer:";
+
+                var hidden_layer = document.createElement("input");
+                hidden_layer.setAttribute('class', 'form-control');
+                hidden_layer.setAttribute('type', 'text');
+                hidden_layer.setAttribute('id', 'hidden_layer');
+                hidden_layer.setAttribute('placeholder', 'Valeur entière');
+
+                ////////////////////////////////////////////////////////
+                // var label_output_layer = document.createElement("label");
+                // label_output_layer.innerHTML = "Output layer:";
+
+                // var output_layer = document.createElement("input");
+                // output_layer.setAttribute('class', 'form-control');
+                // output_layer.setAttribute('type', 'text');
+                // output_layer.setAttribute('id', 'output_layer');
+                // output_layer.setAttribute('placeholder', 'Valeur entière');
+
+                ////////////////////////////////////////////////////////
+                // document.getElementById("myForm").appendChild(div_form_group_input_dim);
+                // document.getElementById("inputDim").appendChild(label_input_dim);
+                // document.getElementById("inputDim").appendChild(input_dim);
+
+                document.getElementById("myForm").appendChild(div_form_group_hidden_layer);
+                document.getElementById("hiddenLayer").appendChild(label_hidden_layer);
+                document.getElementById("hiddenLayer").appendChild(hidden_layer);
+
+                // document.getElementById("myForm").appendChild(div_form_group_output_layer);
+                // document.getElementById("outputLayer").appendChild(label_output_layer);
+                // document.getElementById("outputLayer").appendChild(output_layer);
+
+            } else if (evt.target.value === "rbf") {
+                // RBF = Nombre de cluster , iterations_count et nombre de classe
+                $("#myForm").empty();
+
+                ////////////////////////////////////////////////////////
+                var div_form_group_cluster_number = document.createElement("div");
+                div_form_group_cluster_number.setAttribute('class','form-group mb-2');
+                div_form_group_cluster_number.setAttribute('id', 'clusterNumber');
+
+                var div_form_group_iterations_count = document.createElement("div");
+                div_form_group_iterations_count.setAttribute('class','form-group mb-2');
+                div_form_group_iterations_count.setAttribute('id', 'iterationsCount');
+
+                var div_form_group_class_Number = document.createElement("div");
+                div_form_group_class_Number.setAttribute('class','form-group mb-2');
+                div_form_group_class_Number.setAttribute('id', 'classNumber');
+
+                ////////////////////////////////////////////////////////
+                var label_cluster_number = document.createElement("label");
+                label_cluster_number.innerHTML = "Nombre de cluster: ";
+
+                var cluster_number = document.createElement("input");
+                cluster_number.setAttribute('class', 'form-control');
+                cluster_number.setAttribute('type', 'text');
+                cluster_number.setAttribute('id', 'cluster_number');
+                cluster_number.setAttribute('placeholder', 'Valeur entière');
+
+                ////////////////////////////////////////////////////////
+                var label_iterations_count = document.createElement("label");
+                label_iterations_count.innerHTML = "Nombre d'itération:";
+
+                var iterations_count = document.createElement("input");
+                iterations_count.setAttribute('class', 'form-control');
+                iterations_count.setAttribute('type', 'text');
+                iterations_count.setAttribute('id', 'iterations_count');
+                iterations_count.setAttribute('placeholder', 'Valeur entière');
+
+                ////////////////////////////////////////////////////////
+                var label_class_number = document.createElement("label");
+                label_class_number.innerHTML = "Nombre de classe:";
+
+                var class_number = document.createElement("input");
+                class_number.setAttribute('class', 'form-control');
+                class_number.setAttribute('type', 'text');
+                class_number.setAttribute('id', 'class_number');
+                class_number.setAttribute('placeholder', 'Valeur entière');
+
+                ////////////////////////////////////////////////////////
+                document.getElementById("myForm").appendChild(div_form_group_cluster_number);
+                document.getElementById("clusterNumber").appendChild(label_cluster_number);
+                document.getElementById("clusterNumber").appendChild(cluster_number);
+
+                document.getElementById("myForm").appendChild(div_form_group_iterations_count);
+                document.getElementById("iterationsCount").appendChild(label_iterations_count);
+                document.getElementById("iterationsCount").appendChild(iterations_count);
+
+                document.getElementById("myForm").appendChild(div_form_group_class_Number);
+                document.getElementById("classNumber").appendChild(label_class_number);
+                document.getElementById("classNumber").appendChild(class_number);
+
+            } else {
+                $("#myForm").empty();
+            }
+            
+        }
+
+        $("#btn1").click(function(){
+            alert("Text: " + $("#test").content());
+        });
+
+        // function getAndPostResult(){
+        $("#postData").click(function(){
+            // $.post("demo_test_post.asp",{
+            //     name: "Donald Duck",
+            //     city: "Duckburg"
+            // },
+
+            // function(data,status){
+            //     alert("Data: " + data + "\nStatus: " + status);
+            // });
+
+            var data = {
+                "url": $("#url").val(),
+                "model": $("#modeleSelection").val()
+            }
+
+            alert("data");
+            // console.log("ok");
+            //console.log(data);
+            alert("data");
+        });
+
+        function updateSavedModeleSelection(evt) {
+            if (evt.target.value === "1") {
+                alert("*** Linéaire: p1 ***");
+            }
+        }
+
+      </script>
+      <style>
+      </style>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Classicaux IA</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" disabled>Classicaux IA</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Modèles enregistrés</a></li>
+                <li><a href="/launchModel">Lancer un modèle</a></li>
+            </ul>
+            <button class="btn btn-danger navbar-btn">Générer un rapport</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>Classification des genres musicaux</h1>      
+        <p>L'objectif de ce projet est de catégoriser des musiques par genre musicaux grâce à des modèles algorithmique.</p>
+    </div>
+
+    <div class="container">
+        <div class="form-inline">
+            <div class="form-group mb-2">
+                <input type="text" class="form-control" id="url" placeholder="Copier votre url">
+            </div>
+            <div class="form-group mb-2">
+                <select class="form-control" aria-label="Default select example" id="savedModeleSelection">
+                    <option selected value="none">Sélectioner un modèle enregistrés</option>
+                    {% for v in file %}
+                        <option value="{{ v }}">{{ v }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group mb-2">
+                <button id="btnSavedModeleSelection" class="btn btn-success" id="postData" onclick="getAndPostResult()">Valider</button> 
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function getAndPostResult(){
+
+        $.ajax({
+            url: "http://127.0.0.1:5002/useExistingModel",
+            type: "POST", 
+            async: false,
+            dataType: 'json',    
+            data: {
+                "url": $("#url").val(),
+                "model": $("#savedModeleSelection").val()
+            }
+        })
+        .done (function(data, textStatus, jqXHR) {
+            alert("Le genre de cette musique est: " + data);
+        })
+        .fail (function(jqXHR, textStatus, errorThrown) { 
+            alert("Error"); 
+        })
+    }
+</script>
+</html>
