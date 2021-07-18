@@ -2,11 +2,18 @@
 #include "header.h"
 #include "rbf.h"
 
+/*
+def get_distance(x1, x2):
+    sum = 0
+    for i in range(len(x1)):
+        sum += (x1[i] - x2[i]) ** 2
+    return np.sqrt(sum)
 
-RBF::RBF(float *x, int size_x, float *y, int size_y, float *tX, int size_tX,
+*/
+
+RBF::RBF(float* x, int size_x, float *y, int size_y, float *tX, int size_tX,
          float *tY, int size_tY, int number_of_classes, int k, bool std_from_clusters = false) {
-
-    this->x = CreateModel(x, size_x);
+    this->x = CreateModel(x,size_x);
     this->y = CreateModel(y, size_y);
     this->tX = CreateModel(tX, size_tX);
     this->tY = CreateModel(tY, size_tY);
@@ -34,16 +41,22 @@ Model2 *RBF::convert_to_one_hot(float *x, int sizeX, int num_of_classes) {
 }
 
 /*
-    def rbf(self, x, c, s):
-        distance = get_distance(x, c)
-        return 1 / np.exp(-distance / s ** 2)
+def get_distance(x1, x2):
+    sum = 0
+    for i in range(len(x1)):
+        sum += (x1[i] - x2[i]) ** 2
+    return np.sqrt(sum)
+
 */
-float RBF::rbf(float *x, int sizeX, float *c, int sizeC, float s) {
-    float distance = this->get_distance(x, sizeX, c, sizeC);
-    return 1 / exp(-distance / pow(s, 2));
+float RBF::get_distance(float* x1, int size_x1, float* x2, int size_x2) {
+    float sum = 0.0f;
+
+    for (int i = 0; i < size_x1; i += 1) {
+        sum += pow(x1[i] - x2[i], 2);
+    }
+
+    return sqrt(sum);
 }
-
-
 /*
    def rbf_list(self, X, centroids, std_list):
        RBF_list = []
@@ -51,7 +64,6 @@ float RBF::rbf(float *x, int sizeX, float *c, int sizeC, float s) {
            RBF_list.append([self.rbf(x, c, s) for (c, s) in zip(centroids, std_list)])
        return np.array(RBF_list)
 */
-
 Model2 *RBF::rbf_list(Model2 *X, Model2 *centroids, Model *std_list) {
     Model2 *RBF_list = (Model2 *) (malloc(sizeof(Model2 *)));
     RBF_list->values = (float **) (malloc(sizeof(float **) * X->x));
@@ -69,7 +81,18 @@ Model2 *RBF::rbf_list(Model2 *X, Model2 *centroids, Model *std_list) {
     return RBF_list;
 }
 
-/*def fit(self):
+/*
+    def rbf(self, x, c, s):
+        distance = get_distance(x, c)
+        return 1 / np.exp(-distance / s ** 2)
+*/
+float RBF::rbf(float *x, int sizeX, float *c, int sizeC, float s) {
+    float distance = this->get_distance(x, sizeX, c, sizeC);
+    return 1 / exp(-distance / pow(s, 2));
+}
+
+/*
+def fit(self):
 
     self.centroids, self.std_list = kmeans(self.X, self.k, max_iters=1000)
 
@@ -90,86 +113,31 @@ Model2 *RBF::rbf_list(Model2 *X, Model2 *centroids, Model *std_list) {
     diff = self.pred_ty - self.ty
 
     print('Accuracy: ', len(np.where(diff == 0)[0]) / len(diff))
-    */
-
-void RBF::fit() {
-
-}
-
-/*
-def get_distance(x1, x2):
-    sum = 0
-    for i in range(len(x1)):
-        sum += (x1[i] - x2[i]) ** 2
-    return np.sqrt(sum)
-
 */
+void fit(){
 
-float RBF::get_distance(float *x1, int size_x1, float *x2, int size_x2) {
-    float sum = 0.0f;
-
-    for (int i = 0; i < size_x1; i += 1) {
-        sum += pow(x1[i] - x2[i], 2);
-    }
-
-    return sqrt(sum);
 }
-
 /*
 def kmeans(X, k, max_iters):
 
     centroids = X[np.random.choice(range(len(X)), k, replace=False)]
-
     converged = False
-
     current_iter = 0
-
     while (not converged) and (current_iter < max_iters):
-
         cluster_list = [[] for i in range(len(centroids))]
-
         for x in X:  # Go through each data point
             distances_list = []
             for c in centroids:
                 distances_list.append(get_distance(c, x))
             cluster_list[int(np.argmin(distances_list))].append(x)
-
         cluster_list = list((filter(None, cluster_list)))
-
         prev_centroids = centroids.copy()
-
         centroids = []
-
         for j in range(len(cluster_list)):
             centroids.append(np.mean(cluster_list[j], axis=0))
-
         pattern = np.abs(np.sum(prev_centroids) - np.sum(centroids))
-
         print('K-MEANS: ', int(pattern))
-
         converged = (pattern == 0)
-
         current_iter += 1
-
     return np.array(centroids), [np.std(x) for x in cluster_list]
  */
-
-float* kmeans(float* x, int sizeX, int k, int max_iters){
-    float* clusters;
-    for(int i = 0;i < sizeX ; i++){ // Génération de nombres aléatoires dans X
-        std::random_device rd;
-        std::default_random_engine generator(rd());
-        std::uniform_real_distribution<float> distribution(minimumArray(x,sizeX), maximumArray(x,sizeX)); // minimum and maximum list
-        clusters[i] = distribution(generator);
-    }
-    bool converged = false;
-    int current_iter = 0;
-    while (not converged and current_iter < max_iters){
-
-
-        current_iter+=1;
-
-
-    }
-}
-
