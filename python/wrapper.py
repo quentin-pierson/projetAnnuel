@@ -26,13 +26,13 @@ class MyMLPRawWrapper:
             Y = np.expand_dims(Y, axis=0)
 
         if self.is_classification:
-            self.mlp.train_classification_stochastic_gradient_backpropagation_mlp_model(self.model,
+            self.mlp.train_classification_stochastic_gradient_backpropagation(self.model,
                                                                                         X.flatten(),
                                                                                         Y.flatten(),
                                                                                         self.alpha,
                                                                                         self.iterations_count)
         else:
-            self.mlp.train_regression_stochastic_gradient_backpropagation_mlp_model(self.model,
+            self.mlp.train_regression_stochastic_gradient_backpropagation(self.model,
                                                                                     X.flatten(),
                                                                                     Y.flatten(),
                                                                                     self.alpha,
