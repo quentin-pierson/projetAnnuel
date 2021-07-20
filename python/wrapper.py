@@ -5,7 +5,8 @@ class MyMLPRawWrapper:
     def __init__(self, npl: [int], is_classification: bool = True,
                  alpha: float = 0.01, iterations_count: int = 1000):
         self.mlp = MLPModel()
-        self.model = self.mlp.create_mlp_model(npl)
+        self.result = self.mlp.create_mlp_model(npl)
+        self.model = self.result[0]
         self.is_classification = is_classification
         self.alpha = alpha
         self.iterations_count = iterations_count
