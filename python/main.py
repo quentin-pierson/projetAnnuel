@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from linearModel import linearModel
 from mlp import MLPModel
-import tqdm
 
 lm = linearModel()
 mlp = MLPModel()
@@ -65,6 +64,12 @@ if __name__ == '__main__':
     # lm.destroy_linear_model(resultat)
 
     # ----------------------------------------------------------------------------------
+    #              Utilisation du Modèle linéaire pour la classification avec load
+    # ----------------------------------------------------------------------------------
+
+
+
+    # ----------------------------------------------------------------------------------
     #               Utilisation du Modèle linéaire pour la régression
     # ----------------------------------------------------------------------------------
 
@@ -118,35 +123,35 @@ if __name__ == '__main__':
     #               Utilisation du Modèle linéaire pour la régression avec load
     # ----------------------------------------------------------------------------------
 
-    # dataset_inputs = [
-    #     [-5],
-    #     [4],
-    #     [4]
-    #
-    # ]
-    #
-    # dataset_expected_outputs = [
-    #     5.2,
-    #     7,
-    #     8.5
-    # ]
-    #
-    # resultat3 = lm.load_linear_model("../Save/20200818.json")
-    # model3 = resultat3[0]
-    #
-    # flattened_dataset_inputs = []
-    # for p in dataset_inputs:
-    #     flattened_dataset_inputs.append(p[0])
-    #
-    # test_dataset_inputs = [i for i in range(-10, 11)]
-    # predicted_outputs = [lm.predict_linear_model_regression(model3, [p]) for p in test_dataset_inputs]
-    #
-    # plt.plot(test_dataset_inputs, predicted_outputs)
-    # plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
-    # plt.axis([-10, 10, -10, 10])
-    # plt.show()
-    #
-    # print("Je suis dead ", lm.destroy_linear_model(resultat3))
+    dataset_inputs = [
+        [-5],
+        [4],
+        [4]
+
+    ]
+
+    dataset_expected_outputs = [
+        5.2,
+        7,
+        8.5
+    ]
+
+    resultat3 = lm.load_linear_model("../Save/linear_model_regression_202171816485.json")
+    model3 = resultat3[0]
+
+    flattened_dataset_inputs = []
+    for p in dataset_inputs:
+        flattened_dataset_inputs.append(p[0])
+
+    test_dataset_inputs = [i for i in range(-10, 11)]
+    predicted_outputs = [lm.predict_linear_model_regression(model3, [p]) for p in test_dataset_inputs]
+
+    plt.plot(test_dataset_inputs, predicted_outputs)
+    plt.scatter([p[0] for p in dataset_inputs], dataset_expected_outputs, s=200)
+    plt.axis([-10, 10, -10, 10])
+    plt.show()
+
+    lm.destroy_linear_model(resultat3)
 
     # ----------------------------------------------------------------------------------
     #               Utilisation du MLP pour la classification
@@ -201,7 +206,7 @@ if __name__ == '__main__':
     #     flattened_dataset_inputs.append(p[0])
     #     flattened_dataset_inputs.append(p[1])
     #
-    # mlp.save_mlp_classification(model3)
+    # # mlp.save_mlp_classification(model3)
     #
     # mlp.free_MLP(resultat3)
 
@@ -223,7 +228,7 @@ if __name__ == '__main__':
     #     1,
     # ]
     #
-    # resultat3 = mlp.load_mlp_model("../Save/mlp_2_2_1_classification_202171414159.json")
+    # resultat3 = mlp.load_mlp_model("../Save/mlp_classification_2_2_1_202171816254.json")
     # model3 = resultat3[0]
     #
     # test_dataset = [[x1 / 10, x2 / 10] for x1 in range(-10, 20) for x2 in range(-10, 20)]
