@@ -6,4 +6,5 @@ python/__pycache__/
 CppIA/Eigen/
 data/test
 data/train
+python/path_to_dll.py
 
