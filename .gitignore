@@ -4,7 +4,6 @@
 cmake-build-debug/
 python/__pycache__/
 CppIA/Eigen/
-Save/
 data/test
 data/train
 
