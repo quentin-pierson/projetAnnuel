@@ -53,3 +53,4 @@ class MyMLPRawWrapper:
                 results.append(self.mpl.predict_mlp_model_regression(self.model, x.flatten()))
 
         return np.array(results)
+
