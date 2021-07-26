@@ -14,8 +14,8 @@ import numpy as np
 from scipy import signal
 from scipy.io import wavfile
 
-audio_path = "../../data/musiques/"
-spec_path = "../../data/spectrogrammes/"
+audio_path = "C:/Users/Antoine/Desktop/Projet_annuel/projetAnnuel/data/musiques/"
+spec_path = "C:/Users/Antoine/Desktop/Projet_annuel/projetAnnuel/data/spectrogrammes/"
 music_name = audio_path + "tmp_file"
 csv_path = "../../data/csv_files.csv"
 

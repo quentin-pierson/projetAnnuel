@@ -6,8 +6,13 @@ import json
 from werkzeug.utils import secure_filename
 import requests
 from scrapping import *
+from importlib import import_module
 import sys
-sys.path.insert(0, '../../python')
+# sys.path.insert(0, '../../python')
+sys.path.insert(1, "C:/Users/Antoine/Desktop/Projet_annuel/projetAnnuel/python/")
+
+# linearModel = import_module("python.linearModel")
+# MLPModel = import_module("python.mlp")
 
 from linearModel import linearModel
 from mlp import MLPModel
@@ -28,24 +33,20 @@ def index():
         modelName = jsonModel[0]
         modeltype = jsonModel[1]
         if modelName == "mlp":
-            resultat3 = mlp.load_mlp_model(os.path.join("../../Save/", request.form['model']))
+            resultat3 = mlp.load_mlp_model(os.path.join("C:/Users/Antoine/Desktop/Projet_annuel/projetAnnuel/Save/", request.form['model']))
             model3 = resultat3[0]
             resultImage = import_images_and_resize("music_1_test.png")
             print("resultImage : ", resultImage)
             if modeltype == "classification":
                 predicted_outputs = mlp.predict_mlp_model_classification(model3, resultImage)
                 print("***", predicted_outputs)
-                mlp.free_MLP(resultat3)
-                data = predicted_outputs
-                predicted_outputs = None
-                return transformData(data)
+                return transformData(predicted_outputs, resultat3)
 
             if modeltype == "regression":
                 predicted_outputs = mlp.predict_mlp_model_regression(model3, resultImage)
                 print("***", predicted_outputs)
                 mlp.free_MLP(resultat3)
-                data = predicted_outputs
-                return transformData(data)
+                return transformData(predicted_outputs)
 
         elif modelName == "linear":
             modeltype = jsonModel[2]
@@ -64,17 +65,19 @@ def index():
     else:
         return "ok"
 
-def transformData(data):
-    data = np.argmax(data)
+def transformData(data, resultat3):
+    test = np.argmax(data)
     result = ""
-    if data == 0:
+    if test == 0:
         result = "electro"
-    elif data == 1:
+    elif test == 1:
         result = "metal"
     else:
         result = "rap"
 
     deletePicture()
+
+    mlp.free_MLP(resultat3)
 
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')
